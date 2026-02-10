@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malel | Creative Writer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-red: #E11D48;
+            --brand-black: #0F0F0F;
+        }
+        body {
+            background-color: var(--brand-black);
+            color: #F5F5F5;
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+        .serif { font-family: 'Crimson Pro', serif; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #1a1a1a; }
+        ::-webkit-scrollbar-thumb { background: var(--brand-red); border-radius: 10px; }
+
+        /* Sticky Section Scroll Snap */
+        .snap-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+        }
+        .snap-section {
+            scroll-snap-align: start;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Horizontal Scroll for Featured */
+        .horizontal-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 1.5rem;
+            padding: 1rem 0 2rem 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .scroll-item {
+            flex: 0 0 85%;
+            scroll-snap-align: center;
+            height: 450px;
+        }
+        @media (min-width: 768px) {
+            .scroll-item { flex: 0 0 45%; }
+        }
+
+        /* Nav Glassmorphism */
+        .glass-nav {
+            background: rgba(15, 15, 15, 0.9);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(225, 29, 72, 0.15);
+        }
+
+        .post-content {
+            line-height: 1.8;
+            font-size: 1.125rem;
+            white-space: pre-line;
+        }
+
+        /* Minimal Search Overlay */
+        .search-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+        }
+        .search-modal.active { display: block; }
+        
+        .search-container {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        /* Interactive Inputs */
+        input:focus {
+            border-color: var(--brand-red) !important;
+        }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- Header -->
+    <header class="p-6 flex justify-between items-center fixed top-0 w-full bg-gradient-to-b from-[#0F0F0F] to-transparent z-40">
+        <h1 class="text-3xl font-black tracking-tighter text-rose-600 cursor-pointer" onclick="document.querySelector('.snap-container').scrollTo({top: 0, behavior: 'smooth'})">MALEL</h1>
+        <button onclick="toggleSearch()" class="p-3 glass-nav rounded-full hover:bg-rose-600/10 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+    </header>
+
+    <!-- Main Content with Snap Scroll -->
+    <div class="snap-container">
+        
+        <!-- SECTION 1: Featured -->
+        <section class="snap-section px-6 pt-24 max-w-6xl mx-auto">
+            <h2 class="text-xs uppercase tracking-widest text-rose-500 font-bold mb-4">Featured Works &bull; 2026</h2>
+            <div class="horizontal-scroll-container" id="featured-list">
+                <!-- Dynamically filled -->
+            </div>
+        </section>
+
+        <!-- SECTION 2: Series -->
+        <section id="series-section" class="snap-section px-6 py-24 bg-zinc-950/50">
+            <div class="max-w-4xl mx-auto w-full">
+                <h2 class="text-4xl font-black mb-12 tracking-tight">The Series</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="group relative aspect-video rounded-xl overflow-hidden border border-white/10 bg-zinc-900 cursor-pointer">
+                        <div class="absolute inset-0 bg-rose-900/20 group-hover:bg-rose-900/40 transition-colors"></div>
+                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
+                            <h3 class="text-2xl font-bold serif">The Salt Cycles</h3>
+                            <p class="text-sm text-gray-400">12 Poems on Grief and Growth</p>
+                        </div>
+                    </div>
+                    <div class="group relative aspect-video rounded-xl overflow-hidden border border-white/10 bg-zinc-900 cursor-pointer">
+                        <div class="absolute inset-0 bg-zinc-800/20 group-hover:bg-zinc-800/40 transition-colors"></div>
+                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
+                            <h3 class="text-2xl font-bold serif">Urban Echoes</h3>
+                            <p class="text-sm text-gray-400">Chronicles of Nairobi Life</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Feed -->
+        <section id="archive-section" class="snap-section px-6 py-24">
+            <div class="max-w-4xl mx-auto w-full">
+                <div class="flex items-baseline justify-between mb-8 border-b border-rose-600/30 pb-2">
+                    <h2 class="text-2xl font-bold uppercase tracking-tighter">The Full Archive</h2>
+                    <span class="text-sm text-rose-500 font-mono" id="post-count">100+ items</span>
+                </div>
+                <div id="posts-feed" class="space-y-12">
+                    <!-- Posts will be injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Waiting List / Footer -->
+        <footer class="snap-section px-6 py-24 bg-zinc-950 border-t border-rose-600/20">
+            <div class="max-w-2xl mx-auto text-center">
+                <h2 class="text-4xl font-black mb-4 tracking-tighter serif">Join Malel's Inner Circle</h2>
+                <p class="text-gray-400 mb-12">Be the first to know when the 2026 limited edition collection drops. Join the waiting list.</p>
+                
+                <form action="https://formsubmit.co/ivycheruto30@gmail.com" method="POST" class="space-y-4">
+                    <input type="hidden" name="_subject" value="New Malel Waiting List Sign-up!">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_template" value="table">
+                    
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <input type="email" name="email" required placeholder="your.email@example.com" 
+                            class="flex-1 bg-zinc-900 border border-white/10 px-6 py-4 rounded-full text-white focus:outline-none transition-all">
+                        <button type="submit" class="bg-rose-600 hover:bg-rose-700 px-10 py-4 rounded-full font-black text-sm uppercase tracking-widest transition-all">
+                            Join the list
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="mt-24 pt-12 border-t border-white/5 text-gray-600 text-xs tracking-widest uppercase">
+                    &copy; 2026 Malel Creative. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Reader Overlay -->
+    <div id="reader-overlay" class="fixed inset-0 bg-[#0F0F0F] z-50 overflow-y-auto hidden">
+        <div class="max-w-2xl mx-auto px-6 py-12">
+            <button onclick="closeReader()" class="mb-8 flex items-center gap-2 text-rose-500 font-bold hover:text-rose-400 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                BACK TO FEED
+            </button>
+            <article id="reader-content">
+                <!-- Content injected here -->
+            </article>
+        </div>
+    </div>
+
+    <!-- Minimal Search Modal -->
+    <div id="search-modal" class="search-modal" onclick="if(event.target === this) toggleSearch()">
+        <div class="search-container">
+            <div class="glass-nav rounded-full flex items-center px-6 py-4 shadow-2xl border border-rose-600/30">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" class="text-rose-500 mr-4"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" id="search-input" placeholder="Find a piece..." 
+                    class="bg-transparent w-full text-white text-lg focus:outline-none placeholder:text-zinc-600"
+                    oninput="handleSearch(this.value)">
+                <button onclick="toggleSearch()" class="ml-4 text-zinc-500 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            
+            <div id="search-results" class="mt-4 glass-nav rounded-3xl overflow-hidden max-h-[60vh] overflow-y-auto shadow-2xl">
+                <!-- Results -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="glass-nav fixed bottom-6 left-1/2 -translate-x-1/2 z-40 px-8 py-4 rounded-full flex justify-around items-center gap-12 border border-rose-600/10">
+        <button onclick="document.querySelector('.snap-container').scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center gap-1 text-rose-500 hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span class="text-[9px] font-black uppercase">Home</span>
+        </button>
+        <button onclick="toggleSearch()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-rose-400 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <span class="text-[9px] font-black uppercase">Search</span>
+        </button>
+        <button onclick="document.getElementById('series-section').scrollIntoView({behavior: 'smooth'})" class="flex flex-col items-center gap-1 text-gray-500 hover:text-rose-400 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21v-8m0 0 4 4m-4-4-4 4M4 7h16"/></svg>
+            <span class="text-[9px] font-black uppercase">Series</span>
+        </button>
+    </nav>
+
+    <script>
+        const allWorks = [
+            {
+                id: 'p1',
+                title: "5K REASON WHY",
+                date: "Feb 11, 2026",
+                category: "Poetry",
+                excerpt: "I might have been in too deep. I fell down a hole once, I told myself...",
+                content: `I might have been in too deep 
+I fell down a hole once, 
+I told myself 
+"You can see the light, 
+You can climb out of here." 
+Well I lied to myself. 
+I had a torch light 
+It was strapped on my head, 
+It was facing my eyes
+While I thought I was just on the surface
+My own hands were digging me deeper
+
+I remember asking a frog in the hole, 
+"Can I be in love with a friend?" 
+The frog was so direct and charming. 
+"Yes you can be in love. 
+However, the torch light might go off" 
+
+I did not understand at first. 
+I kept digging. 
+Digging deeper 
+A small bird that had been with me
+Fell in and he kissed me
+Truth in it the torch light got dim
+It dimmed until it became dark. 
+
+I discovered the distance from the surface was no longer close
+The bird flew back home 
+I was left alone. 
+I called for someone but no one came 
+ 
+That's when I understood, 
+I was delusional. 
+I thought that the torch light would always be there
+I thought the bird will abandon his home 
+To stay with me 
+I thought I could have a torch for my path way, 
+A bird for company and a frog to support me
+ 
+I was wrong. 
+I lost the bird. 
+I lost the torch. 
+The frog remained insulting me.`,
+                featured: true,
+                image: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&q=80&w=800"
+            },
+            {
+                id: 'p2',
+                title: "MOVE ON",
+                date: "Jan 15, 2026",
+                category: "Poetry",
+                excerpt: "Its just this one time; I will do it just once. I won't ever try it again. Dip a finger, just once...",
+                content: `Its just this one time;
+I will do it just once.
+I won't ever try it again.
+Dip a finger, just once 
+ 
+I dipped my finger in the jar,
+The honey was sweet.
+I dipped it again, again and again.
+God; it was so sweet.
+ 
+Was it sweet though?
+His hands on my body was,
+His eyes looking at me. And.
+His steady rhythmic heartbeat.
+ 
+Even while tasting the honey,
+Somewhere deep in my mind,
+I knew without a doubt,
+The honey jar will be empty soon.
+ 
+I would go back home,
+Smelling like betrayal.
+I will loose him.
+The one I chose.
+ 
+Yet I cannot stop,
+I cannot control myself,
+I lie, I haven't dipped the whole hand;
+It's just the adrenaline. 
+Is it though?`,
+                featured: false
+            },
+            {
+                id: 'p3',
+                title: "THE FUNERAL",
+                date: "Dec 20, 2025",
+                category: "Short Stories",
+                excerpt: "Some fat guy in my job died because he had a heart attack that was coming for him...",
+                content: `Some fat guy in my job died because he had a heart attack that was coming for him considering he was almost a hundred and fifty kilograms. Looked like a water tank. I am sure his legs couldn't carry him for more than a three minute walk. 
+
+The people at my work said we should go to his funeral and everyone should bring a plus one. I was considering to bring one of my lady friends as a date but he heard about it. That was the end of that, he bought me a black bodycon, a big hat with a veil in it and beautiful black boots. He himself was dressed in all black suit and we looked like the angel of death. 
+
+When we arrived at his home, his car tinted we sat in it for almost six minutes. He was claiming my mouth in that possessive obsessive way he does before we go out into the world. He also always makes sure to leave a bruise so that I can remember who owns me. Classic 19th century psycho and you ask why I am attracted to him. He raises my dress to my waist, so much for ironing it and lands his mouth in my inner thighs. He bites so hard that blood comes out. He licks the blood then arranges me and we get off. 
+
+I don't understand the bite though. The funeral family has decided that they will leave the body inside the house for viewing then when it's time to burry it's when they will bring it out. We are the last ones to go to view his body and this is where I know he has no boundaries. I can see his boner and I know he's planning something shitty. 
+
+The something shitty was bending me over the casket, both the entrance and exit door open and anyone could walk in, and sliding inside my wet pussy with ease because of the earlier make out session. He is slow and I have never been terrified in my life like that. His hands rub my inner thighs slowly and I swear time stops as he does that. My body responds to the terror and I become so slippery that I no longer feel him all I feel is as if something hard is sliding in me but more like with soap. 
+
+My cheeks are pressed firmly on the glass covering the idiots face and I think I see him cry for a second because he is thrusting now in a ferocious way. My heart is pounding on my throat when one of his hands skate down to my clit to rub my it with his thumb in a circulation motion. The other hand goes to my hair and I am pulled back that I feel him hit my g spot so painfully and hard. I melt and he feels it as he increases his speed. I have been trying not to moan but the pressure on my throat and heart needs to be released and I try my best but we hear footsteps. I cry for him to let us go but he increases speed spills in me then I also cum before he draws my dress down and hugs me hiding his naked dick. I help him close up as I pretend to cry and him hugging him as the mother of the guy enters.`,
+                featured: true,
+                image: "https://images.unsplash.com/photo-1551029170-191099bc04f9?auto=format&fit=crop&q=80&w=800"
+            }
+        ];
+
+        for(let i = 4; i <= 105; i++) {
+            const year = i > 50 ? 2025 : 2026;
+            allWorks.push({
+                id: i,
+                title: `Reflections Vol. ${i}`,
+                date: `Mar ${(i % 28) + 1}, ${year}`,
+                category: i % 2 === 0 ? "Poetry" : "Essays",
+                excerpt: "Wandering through the digital corridors of memory in the year 2026...",
+                content: `An archive piece from ${year}. Malel continues to explore the intersections of desire, grief, and the modern human condition.`,
+                featured: false
+            });
+        }
+
+        function init() {
+            renderFeatured();
+            renderFeed(allWorks);
+            document.getElementById('post-count').innerText = `${allWorks.length} pieces`;
+        }
+
+        function renderFeatured() {
+            const featuredList = document.getElementById('featured-list');
+            const featured = allWorks.filter(w => w.featured);
+            featuredList.innerHTML = featured.map(work => `
+                <div class="scroll-item group cursor-pointer" onclick="openReader('${work.id}')">
+                    <div class="relative h-full w-full rounded-2xl overflow-hidden border border-white/5 bg-zinc-900 shadow-2xl">
+                        <img src="${work.image || 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&q=80&w=800'}" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform duration-1000">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent p-8 flex flex-col justify-end">
+                            <span class="text-rose-500 font-bold text-xs mb-2 tracking-widest uppercase bg-rose-950/40 w-fit px-3 py-1 rounded-full">${work.category}</span>
+                            <h3 class="text-3xl font-bold leading-tight serif">${work.title}</h3>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderFeed(works) {
+            const feed = document.getElementById('posts-feed');
+            feed.innerHTML = works.slice(0, 15).map(work => `
+                <article class="group cursor-pointer border-b border-white/5 pb-12 hover:border-rose-600/20 transition-colors" onclick="openReader('${work.id}')">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-3 text-xs font-bold text-gray-500 uppercase tracking-widest">
+                                <span>${work.date}</span>
+                                <span class="w-1 h-1 bg-rose-600 rounded-full"></span>
+                                <span class="text-rose-500">${work.category}</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-3 group-hover:text-rose-500 transition-colors serif">${work.title}</h3>
+                            <p class="text-gray-400 leading-relaxed line-clamp-3">${work.excerpt}</p>
+                        </div>
+                        ${work.image ? `
+                        <div class="w-full md:w-48 h-32 rounded-lg overflow-hidden bg-zinc-900">
+                            <img src="${work.image}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
+                        </div>` : ''}
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        function openReader(id) {
+            const work = allWorks.find(w => w.id.toString() === id.toString());
+            if (!work) return;
+            const content = document.getElementById('reader-content');
+            content.innerHTML = `
+                <div class="mb-4 text-rose-500 font-bold uppercase tracking-widest text-sm">${work.category}</div>
+                <h1 class="text-4xl md:text-5xl font-black mb-6 serif leading-tight">${work.title}</h1>
+                <div class="flex items-center gap-4 mb-10 text-gray-500 border-y border-white/10 py-4">
+                    <div class="w-12 h-12 rounded-full bg-rose-600 flex items-center justify-center font-bold text-white text-xl">M</div>
+                    <div>
+                        <p class="text-white font-bold">Malel</p>
+                        <p class="text-xs">${work.date} &bull; 2026 Original</p>
+                    </div>
+                </div>
+                <div class="post-content serif text-gray-200">
+                    ${work.content}
+                </div>
+            `;
+            document.getElementById('reader-overlay').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeReader() {
+            document.getElementById('reader-overlay').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function toggleSearch() {
+            const modal = document.getElementById('search-modal');
+            const isActive = modal.classList.toggle('active');
+            if(isActive) {
+                document.getElementById('search-input').value = '';
+                document.getElementById('search-results').innerHTML = '';
+                document.getElementById('search-input').focus();
+            }
+        }
+
+        function handleSearch(query) {
+            const resultsBox = document.getElementById('search-results');
+            if(!query) {
+                resultsBox.innerHTML = '';
+                return;
+            }
+            const filtered = allWorks.filter(w => 
+                w.title.toLowerCase().includes(query.toLowerCase()) || 
+                w.content.toLowerCase().includes(query.toLowerCase())
+            ).slice(0, 10);
+
+            resultsBox.innerHTML = filtered.map(w => `
+                <div class="p-4 border-b border-white/5 hover:bg-rose-600/10 cursor-pointer transition-all flex justify-between items-center group" onclick="toggleSearch(); openReader('${w.id}')">
+                    <div>
+                        <h4 class="font-bold text-base group-hover:text-rose-500 transition-colors">${w.title}</h4>
+                        <p class="text-xs text-zinc-500 uppercase tracking-widest mt-1">${w.category} &bull; ${w.date}</p>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" class="text-zinc-700 group-hover:text-rose-500 transition-colors"><path d="m9 18 6-6-6-6"/></svg>
+                </div>
+            `).join('') || '<p class="text-center text-zinc-600 py-8 text-sm italic">Nothing found in the archives.</p>';
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
