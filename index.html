@@ -70,7 +70,7 @@
             white-space: pre-line;
         }
 
-        /* Minimal Search Overlay */
+        /* Minimal Search Modal */
         .search-modal {
             display: none;
             position: fixed;
@@ -78,8 +78,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
             z-index: 100;
         }
         .search-modal.active { display: block; }
@@ -90,12 +90,30 @@
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
-            max-width: 600px;
+            max-width: 500px;
         }
 
         /* Interactive Inputs */
-        input:focus {
+        input:focus, textarea:focus {
             border-color: var(--brand-red) !important;
+        }
+        
+        /* Simple Modal Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade { animation: fadeIn 0.3s ease forwards; }
+
+        /* Subscriber Badge */
+        .premium-badge {
+            background: linear-gradient(45deg, #E11D48, #be123c);
+            box-shadow: 0 0 15px rgba(225, 29, 72, 0.4);
+        }
+
+        .liked-btn {
+            color: var(--brand-red) !important;
+            fill: var(--brand-red);
         }
     </style>
 </head>
@@ -104,7 +122,7 @@
     <!-- Header -->
     <header class="p-6 flex justify-between items-center fixed top-0 w-full bg-gradient-to-b from-[#0F0F0F] to-transparent z-40">
         <h1 class="text-3xl font-black tracking-tighter text-rose-600 cursor-pointer" onclick="document.querySelector('.snap-container').scrollTo({top: 0, behavior: 'smooth'})">MALEL</h1>
-        <button onclick="toggleSearch()" class="p-3 glass-nav rounded-full hover:bg-rose-600/10 transition-colors">
+        <button onclick="toggleSearch()" class="p-3 glass-nav rounded-full hover:bg-rose-600/10 transition-colors shadow-lg">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         </button>
     </header>
@@ -114,44 +132,75 @@
         
         <!-- SECTION 1: Featured -->
         <section class="snap-section px-6 pt-24 max-w-6xl mx-auto">
-            <h2 class="text-xs uppercase tracking-widest text-rose-500 font-bold mb-4">Featured Works &bull; 2026</h2>
+            <h2 class="text-xs uppercase tracking-widest text-rose-500 font-bold mb-4">Latest Releases &bull; 2026</h2>
             <div class="horizontal-scroll-container" id="featured-list">
                 <!-- Dynamically filled -->
             </div>
         </section>
 
-        <!-- SECTION 2: Series -->
-        <section id="series-section" class="snap-section px-6 py-24 bg-zinc-950/50">
-            <div class="max-w-4xl mx-auto w-full">
-                <h2 class="text-4xl font-black mb-12 tracking-tight">The Series</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="group relative aspect-video rounded-xl overflow-hidden border border-white/10 bg-zinc-900 cursor-pointer">
-                        <div class="absolute inset-0 bg-rose-900/20 group-hover:bg-rose-900/40 transition-colors"></div>
-                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
-                            <h3 class="text-2xl font-bold serif">The Salt Cycles</h3>
-                            <p class="text-sm text-gray-400">12 Poems on Grief and Growth</p>
-                        </div>
-                    </div>
-                    <div class="group relative aspect-video rounded-xl overflow-hidden border border-white/10 bg-zinc-900 cursor-pointer">
-                        <div class="absolute inset-0 bg-zinc-800/20 group-hover:bg-zinc-800/40 transition-colors"></div>
-                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
-                            <h3 class="text-2xl font-bold serif">Urban Echoes</h3>
-                            <p class="text-sm text-gray-400">Chronicles of Nairobi Life</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 3: Feed -->
+        <!-- SECTION 2: Feed -->
         <section id="archive-section" class="snap-section px-6 py-24">
             <div class="max-w-4xl mx-auto w-full">
                 <div class="flex items-baseline justify-between mb-8 border-b border-rose-600/30 pb-2">
                     <h2 class="text-2xl font-bold uppercase tracking-tighter">The Full Archive</h2>
-                    <span class="text-sm text-rose-500 font-mono" id="post-count">100+ items</span>
+                    <span class="text-sm text-rose-500 font-mono" id="post-count">... items</span>
                 </div>
                 <div id="posts-feed" class="space-y-12">
                     <!-- Posts will be injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Series -->
+        <section id="series-section" class="snap-section px-6 py-24 bg-zinc-950/50">
+            <div class="max-w-5xl mx-auto w-full">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+                    <div>
+                        <h2 class="text-4xl font-black mb-2 tracking-tight">The Series</h2>
+                        <p class="text-rose-500 font-mono text-xs uppercase tracking-widest italic">Subscriber Exclusive: Limited Works</p>
+                    </div>
+                    <div class="glass-nav px-6 py-3 rounded-2xl border border-rose-600/20 max-w-sm">
+                        <p class="text-[10px] text-gray-500 uppercase font-bold mb-1 tracking-widest">Follower Access</p>
+                        <p class="text-sm text-gray-300">Subscribe below to unlock limited series and get email notifications for new work.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Limited Series Cards -->
+                    <div class="group relative aspect-[4/5] rounded-3xl overflow-hidden border border-white/5 bg-zinc-900 cursor-pointer shadow-2xl">
+                        <div class="absolute inset-0 bg-rose-900/60 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center p-6 text-center">
+                            <span class="text-white font-black text-xs uppercase tracking-widest border-2 border-white px-4 py-2">Join Inner Circle to Unlock</span>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover opacity-50">
+                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
+                            <div class="premium-badge w-fit px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-3">Limited</div>
+                            <h3 class="text-2xl font-bold serif">The Salt Cycles</h3>
+                            <p class="text-sm text-gray-400 mt-2">12 Raw Poems on Grief</p>
+                        </div>
+                    </div>
+                    <!-- Series 2 -->
+                    <div class="group relative aspect-[4/5] rounded-3xl overflow-hidden border border-white/5 bg-zinc-900 cursor-pointer shadow-2xl">
+                        <div class="absolute inset-0 bg-rose-900/60 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center p-6 text-center">
+                            <span class="text-white font-black text-xs uppercase tracking-widest border-2 border-white px-4 py-2">Join Inner Circle to Unlock</span>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover opacity-50">
+                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
+                            <div class="premium-badge w-fit px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-3">Limited</div>
+                            <h3 class="text-2xl font-bold serif">Urban Echoes</h3>
+                            <p class="text-sm text-gray-400 mt-2">Nairobi Midnight Stories</p>
+                        </div>
+                    </div>
+                    <!-- Series 3 -->
+                    <div class="group relative aspect-[4/5] rounded-3xl overflow-hidden border border-white/5 bg-zinc-900 cursor-pointer shadow-2xl">
+                        <div class="absolute inset-0 bg-rose-900/60 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center p-6 text-center">
+                            <span class="text-white font-black text-xs uppercase tracking-widest border-2 border-white px-4 py-2">Join Inner Circle to Unlock</span>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover opacity-50">
+                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
+                            <div class="premium-badge w-fit px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-3">New</div>
+                            <h3 class="text-2xl font-bold serif">Pretense & Fate</h3>
+                            <p class="text-sm text-gray-400 mt-2">The Unseen Conversations</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -160,18 +209,17 @@
         <footer class="snap-section px-6 py-24 bg-zinc-950 border-t border-rose-600/20">
             <div class="max-w-2xl mx-auto text-center">
                 <h2 class="text-4xl font-black mb-4 tracking-tighter serif">Join Malel's Inner Circle</h2>
-                <p class="text-gray-400 mb-12">Be the first to know when the 2026 limited edition collection drops. Join the waiting list.</p>
+                <p class="text-gray-400 mb-12">Subscribers receive exclusive access to limited works and email notifications whenever a new piece is added.</p>
                 
                 <form action="https://formsubmit.co/ivycheruto30@gmail.com" method="POST" class="space-y-4">
-                    <input type="hidden" name="_subject" value="New Malel Waiting List Sign-up!">
+                    <input type="hidden" name="_subject" value="New Malel Inner Circle Subscriber!">
                     <input type="hidden" name="_captcha" value="false">
-                    <input type="hidden" name="_template" value="table">
                     
                     <div class="flex flex-col md:flex-row gap-4">
                         <input type="email" name="email" required placeholder="your.email@example.com" 
-                            class="flex-1 bg-zinc-900 border border-white/10 px-6 py-4 rounded-full text-white focus:outline-none transition-all">
+                            class="flex-1 bg-zinc-900 border border-white/10 px-6 py-4 rounded-full text-white focus:outline-none transition-all focus:border-rose-600">
                         <button type="submit" class="bg-rose-600 hover:bg-rose-700 px-10 py-4 rounded-full font-black text-sm uppercase tracking-widest transition-all">
-                            Join the list
+                            Subscribe
                         </button>
                     </div>
                 </form>
@@ -193,175 +241,142 @@
             <article id="reader-content">
                 <!-- Content injected here -->
             </article>
+
+            <!-- Interaction Section -->
+            <div id="interaction-section" class="mt-16 pt-12 border-t border-white/10">
+                <div class="flex items-center gap-6 mb-12">
+                    <button id="like-btn-main" onclick="handleLike()" class="flex items-center gap-2 text-zinc-400 hover:text-rose-500 transition-all font-bold group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon group-active:scale-125 transition-transform"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.505 4.04 3 5.5L12 21l7-7z"/></svg>
+                        <span id="like-count">0</span>
+                    </button>
+                    <div class="text-zinc-500 text-sm italic serif">Tell the author what you think.</div>
+                </div>
+
+                <!-- Comment Form -->
+                <div class="mb-12">
+                    <h3 class="text-lg font-bold mb-4 uppercase tracking-widest text-zinc-400 text-xs">Post a Comment</h3>
+                    <div class="space-y-4">
+                        <input type="text" id="comment-author" placeholder="Your Name" class="w-full bg-zinc-900 border border-white/5 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors">
+                        <textarea id="comment-text" rows="3" placeholder="Write your thoughts..." class="w-full bg-zinc-900 border border-white/5 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors"></textarea>
+                        <button onclick="submitComment()" class="bg-zinc-100 text-black px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest hover:bg-rose-600 hover:text-white transition-all">Submit</button>
+                    </div>
+                </div>
+
+                <!-- Comments List -->
+                <div id="comments-list" class="space-y-6">
+                    <!-- Comments injected here -->
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Minimal Search Modal -->
+    <!-- Search Modal -->
     <div id="search-modal" class="search-modal" onclick="if(event.target === this) toggleSearch()">
-        <div class="search-container">
-            <div class="glass-nav rounded-full flex items-center px-6 py-4 shadow-2xl border border-rose-600/30">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" class="text-rose-500 mr-4"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                <input type="text" id="search-input" placeholder="Find a piece..." 
-                    class="bg-transparent w-full text-white text-lg focus:outline-none placeholder:text-zinc-600"
+        <div class="search-container animate-fade">
+            <div class="glass-nav rounded-full flex items-center px-6 py-3 shadow-2xl border border-rose-600/40">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" class="text-rose-500 mr-4"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" id="search-input" placeholder="Search the 2026 archive..." 
+                    class="bg-transparent w-full text-white text-base focus:outline-none placeholder:text-zinc-600"
                     oninput="handleSearch(this.value)">
                 <button onclick="toggleSearch()" class="ml-4 text-zinc-500 hover:text-white transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
                 </button>
             </div>
-            
-            <div id="search-results" class="mt-4 glass-nav rounded-3xl overflow-hidden max-h-[60vh] overflow-y-auto shadow-2xl">
-                <!-- Results -->
-            </div>
+            <div id="search-results" class="mt-3 glass-nav rounded-3xl overflow-hidden max-h-[50vh] overflow-y-auto shadow-2xl border border-rose-600/10 hidden"></div>
         </div>
     </div>
 
-    <!-- Bottom Navigation -->
-    <nav class="glass-nav fixed bottom-6 left-1/2 -translate-x-1/2 z-40 px-8 py-4 rounded-full flex justify-around items-center gap-12 border border-rose-600/10">
+    <!-- Navigation -->
+    <nav class="glass-nav fixed bottom-6 left-1/2 -translate-x-1/2 z-40 px-8 py-4 rounded-full flex justify-around items-center gap-12 border border-rose-600/10 shadow-2xl">
         <button onclick="document.querySelector('.snap-container').scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center gap-1 text-rose-500 hover:scale-110 transition-transform">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-            <span class="text-[9px] font-black uppercase">Home</span>
+            <span class="text-[9px] font-black uppercase tracking-tighter">Home</span>
         </button>
         <button onclick="toggleSearch()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-rose-400 transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            <span class="text-[9px] font-black uppercase">Search</span>
+            <span class="text-[9px] font-black uppercase tracking-tighter">Search</span>
         </button>
         <button onclick="document.getElementById('series-section').scrollIntoView({behavior: 'smooth'})" class="flex flex-col items-center gap-1 text-gray-500 hover:text-rose-400 transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21v-8m0 0 4 4m-4-4-4 4M4 7h16"/></svg>
-            <span class="text-[9px] font-black uppercase">Series</span>
+            <span class="text-[9px] font-black uppercase tracking-tighter">Series</span>
         </button>
     </nav>
 
     <script>
+        let currentWorkId = null;
+
         const allWorks = [
             {
-                id: 'p1',
-                title: "5K REASON WHY",
+                id: 'prose_funeral',
+                title: "THE FUNERAL",
+                date: "Feb 11, 2026",
+                category: "OWN YOUR DARKNESS 😉",
+                excerpt: "Some fat guy in my job died because he had a heart attack...",
+                content: `Some fat guy in my job died because he had a heart attack that was coming for him considering he was almost a hundred and fifty kilograms. Looked like a water tank. I am sure his legs couldn't carry him for more than a three minute walk. The people at my work said we should go to his funeral and everyone should bring a plus one. I was considering to bring one of my lady friends as a date but he heard about it. \n\n That was the end of that, he bought me a black bodycon, a big hat with a veil in it and beautiful black boots. He himself was dressed in all black suit and we looked like the angel of death. When we arrived at his home, his car tinted we sat in it for almost six minutes. He was claiming my mouth in that possessive obsessive way he does before we go out into the world. He also always makes sure to leave a bruise so that I can remember who owns me. Classic 19th century psycho and you ask why I am attracted to him. \n\n He raises my dress to my waist, so much for ironing it and lands his mouth in my inner thighs. He bites so hard that blood comes out. He licks the blood then arranges me and we get off. I don't understand the bite though. The funeral family has decided that they will leave the body inside the house for viewing then when it's time to burry it's when they will bring it out. We are the last ones to go to view his body and this is where I know he has no boundaries. I can see his boner and I know he's planning something shitty. \n\n The something shitty was bending me over the casket, both the entrance and exit door open and anyone could walk in, and sliding inside my wet pussy with ease because of the earlier make out session. He is slow and I have never been terrified in my life like that. His hands rub my inner thighs slowly and I swear time stops as he does that. My body responds to the terror and I become so slippery that I no longer feel him all I feel is as if something hard is sliding in me but more like with soap. \n\n My cheeks are pressed firmly on the glass covering the idiots face and I think I see him cry for a second because he is thrusting now in a ferocious way. My heart is pounding on my throat when one of his hands skate down to my clit to rub my it with his thumb in a circulation motion. The other hand goes to my hair and I am pulled back that I feel him hit my g spot so painfully and hard. I melt and he feels it as he increases his speed. \n\n I have been trying not to moan but the pressure on my throat and heart needs to be released and I try my best but we hear footsteps. I cry for him to let us go but he increases speed spills in me then I also cum before he draws my dress down and hugs me hiding his naked dick. I help him close up as I pretend to cry and him hugging him as the mother of the guy enters.`,
+                featured: true,
+                image: "https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?auto=format&fit=crop&q=80&w=800",
+                likes: 42,
+                comments: [
+                    { name: "Sasha", text: "This is hauntingly beautiful.", date: "Feb 11, 2026" }
+                ]
+            },
+            {
+                id: 'prose_dining',
+                title: "THE DINNING TABLE",
+                date: "Feb 11, 2026",
+                category: "Prose",
+                excerpt: "I am going to visit my friend, on the way there he calls. 'Where the fuck do you think you are going?'...",
+                content: `I am going to visit my friend, on the way there he calls. "Where the fuck do you think you are going?" he growls on my phone. I came to terms with the fact that he tracks me all the time. He also knows everyone I know and has forbidden me from visiting of engaging with some of them in any kind of relationship. He is a controlling manipulative son of a bitch that I am in love with. \n\n His breathing is controlled but I can visualize how his jaw Hardens cause I am going to visit one of my friends who actually is the worst. Why? To piss him off. He hasn't been talking to me and I miss him, why not add a bit drama. I could have said I miss him but I am Kenyan, I will never say shit like that. \n\n On my way to this friend I notice he has changed direction and he's heading towards me. It will take him another two hours to pull up to where I am. I park at my friend's parking lawn then walk in her house. She has already cooked and we dig in. After two hours of gossip and hot rage at my man he pulls up, enters the house rudely and I can see the danger in his eyes. His hands are balled into fists and his breathing is erratic. My body tenses and I raise my wine glass to calm down. \n\n The wine plus blood and any available liquid assembles at my core and I am wet instantly. His eyes move to my friend then to mine again, he moves across the room and invites himself to the the girls out. His hands land on my open thigh, I wore a mini skirt heels and a tank top with an overcoat but it was off now. His rage is fully displayed in the arms sucking the life out of my leg. They are imprinted on the thigh when he takes a carrot on the table, licks it then lowers it down, to my panty less pussy and shoves it in. \n\n My friend trys to argue that he's abusing food but one dark look and she's queit. I know this is going to happen here and now, my friend witnessing him humiliate me as he takes everything. He starts to move the carrot well inside and at a right speed then proceeds to order me to drink the wine on my glass. That, my friend helps with, as we all drink as if I am not being assaulted right there and I am quiet about it because low key I love it. \n\n He stops abruptly gets me up and pushes everything of the round table and pulls me on top of it then removes the carrot and he replaces it with himself. "You are mine and you'll follow all the orders I give." He growls in my ear and I moan as his tempo increases. I want to give up but that's when he stops. He looks into my eyes and any idea of letting go and letting myself cum is gone. His eyes are threatening me in that way I can't refuse.`,
+                featured: true,
+                image: "https://images.unsplash.com/photo-1511216335778-7cb8f49fa7a3?auto=format&fit=crop&q=80&w=800",
+                likes: 28,
+                comments: []
+            },
+            {
+                id: 'p_friends',
+                title: "FRIENDS",
                 date: "Feb 11, 2026",
                 category: "Poetry",
-                excerpt: "I might have been in too deep. I fell down a hole once, I told myself...",
-                content: `I might have been in too deep 
-I fell down a hole once, 
-I told myself 
-"You can see the light, 
-You can climb out of here." 
-Well I lied to myself. 
-I had a torch light 
-It was strapped on my head, 
-It was facing my eyes
-While I thought I was just on the surface
-My own hands were digging me deeper
-
-I remember asking a frog in the hole, 
-"Can I be in love with a friend?" 
-The frog was so direct and charming. 
-"Yes you can be in love. 
-However, the torch light might go off" 
-
-I did not understand at first. 
-I kept digging. 
-Digging deeper 
-A small bird that had been with me
-Fell in and he kissed me
-Truth in it the torch light got dim
-It dimmed until it became dark. 
-
-I discovered the distance from the surface was no longer close
-The bird flew back home 
-I was left alone. 
-I called for someone but no one came 
- 
-That's when I understood, 
-I was delusional. 
-I thought that the torch light would always be there
-I thought the bird will abandon his home 
-To stay with me 
-I thought I could have a torch for my path way, 
-A bird for company and a frog to support me
- 
-I was wrong. 
-I lost the bird. 
-I lost the torch. 
-The frog remained insulting me.`,
+                excerpt: "He and I are pretenders; I love him, I want to have him...",
+                content: `He and I are pretenders; I love him, I want to have him, Impress him, Take him. \n\n I can't. Fate doesn't say that. For this reason, I am stuck in this lope. The lope called friendship. \n\n On his end, I think; I am a means for him. There's a path I open. I am not a need or a want. I am a wind. I am needed when I am needed. So he keeps me around. \n\n I am a destructive energy. I am a powerful hurricane. Now I am kept at arm's length. Even far as possible. Boxed and used when needed. \n\n When I finally went down, When my energy died, When I stopped being, Powerful, destructive and a whirl: Two things: I was alone and lonely! \n\n He is not a fun of pretense. I am not a fun of lying. But: He pretends and I do also, I lie and he does also. \n\n Sometimes those monsters we hate, We are there representation! \n\n @Malel_`,
                 featured: true,
-                image: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&q=80&w=800"
+                image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&q=80&w=800",
+                likes: 56,
+                comments: []
             },
             {
-                id: 'p2',
+                id: 'p0',
                 title: "MOVE ON",
-                date: "Jan 15, 2026",
+                date: "Feb 11, 2026",
                 category: "Poetry",
-                excerpt: "Its just this one time; I will do it just once. I won't ever try it again. Dip a finger, just once...",
-                content: `Its just this one time;
-I will do it just once.
-I won't ever try it again.
-Dip a finger, just once 
- 
-I dipped my finger in the jar,
-The honey was sweet.
-I dipped it again, again and again.
-God; it was so sweet.
- 
-Was it sweet though?
-His hands on my body was,
-His eyes looking at me. And.
-His steady rhythmic heartbeat.
- 
-Even while tasting the honey,
-Somewhere deep in my mind,
-I knew without a doubt,
-The honey jar will be empty soon.
- 
-I would go back home,
-Smelling like betrayal.
-I will loose him.
-The one I chose.
- 
-Yet I cannot stop,
-I cannot control myself,
-I lie, I haven't dipped the whole hand;
-It's just the adrenaline. 
-Is it though?`,
-                featured: false
-            },
-            {
-                id: 'p3',
-                title: "THE FUNERAL",
-                date: "Dec 20, 2025",
-                category: "Short Stories",
-                excerpt: "Some fat guy in my job died because he had a heart attack that was coming for him...",
-                content: `Some fat guy in my job died because he had a heart attack that was coming for him considering he was almost a hundred and fifty kilograms. Looked like a water tank. I am sure his legs couldn't carry him for more than a three minute walk. 
-
-The people at my work said we should go to his funeral and everyone should bring a plus one. I was considering to bring one of my lady friends as a date but he heard about it. That was the end of that, he bought me a black bodycon, a big hat with a veil in it and beautiful black boots. He himself was dressed in all black suit and we looked like the angel of death. 
-
-When we arrived at his home, his car tinted we sat in it for almost six minutes. He was claiming my mouth in that possessive obsessive way he does before we go out into the world. He also always makes sure to leave a bruise so that I can remember who owns me. Classic 19th century psycho and you ask why I am attracted to him. He raises my dress to my waist, so much for ironing it and lands his mouth in my inner thighs. He bites so hard that blood comes out. He licks the blood then arranges me and we get off. 
-
-I don't understand the bite though. The funeral family has decided that they will leave the body inside the house for viewing then when it's time to burry it's when they will bring it out. We are the last ones to go to view his body and this is where I know he has no boundaries. I can see his boner and I know he's planning something shitty. 
-
-The something shitty was bending me over the casket, both the entrance and exit door open and anyone could walk in, and sliding inside my wet pussy with ease because of the earlier make out session. He is slow and I have never been terrified in my life like that. His hands rub my inner thighs slowly and I swear time stops as he does that. My body responds to the terror and I become so slippery that I no longer feel him all I feel is as if something hard is sliding in me but more like with soap. 
-
-My cheeks are pressed firmly on the glass covering the idiots face and I think I see him cry for a second because he is thrusting now in a ferocious way. My heart is pounding on my throat when one of his hands skate down to my clit to rub my it with his thumb in a circulation motion. The other hand goes to my hair and I am pulled back that I feel him hit my g spot so painfully and hard. I melt and he feels it as he increases his speed. I have been trying not to moan but the pressure on my throat and heart needs to be released and I try my best but we hear footsteps. I cry for him to let us go but he increases speed spills in me then I also cum before he draws my dress down and hugs me hiding his naked dick. I help him close up as I pretend to cry and him hugging him as the mother of the guy enters.`,
+                excerpt: "It is time, He got a new phone, Moved to a new place...",
+                content: `It is time, He got a new phone, Moved to a new place And got himself a better girl. \n\n Our conversations, pictures and wallpapers, All our memories gone with the phone. The room with our scents rented to someone else. My touch on his skin replaced. \n\n It is time. Time to move on. Forget all the good times. Forget his touch. \n\n It is time. Time to breath fresh air. Time to live in my skin. Time to love life. \n\n I am enclosed in a block. I can not breath. I can not see another. Yet I can write. \n\n What is the point of writing If he's not there to read, If he's not there to feel the words, If he's not there to accept the emotions. \n\n @Malel_`,
                 featured: true,
-                image: "https://images.unsplash.com/photo-1551029170-191099bc04f9?auto=format&fit=crop&q=80&w=800"
+                image: "https://images.unsplash.com/photo-1499209974431-9dac3adaf471?auto=format&fit=crop&q=80&w=800",
+                likes: 89,
+                comments: []
             }
         ];
 
-        for(let i = 4; i <= 105; i++) {
-            const year = i > 50 ? 2025 : 2026;
+        // Seed archive
+        for(let i = 5; i <= 61; i++) {
             allWorks.push({
                 id: i,
-                title: `Reflections Vol. ${i}`,
-                date: `Mar ${(i % 28) + 1}, ${year}`,
+                title: `Archive Fragment ${i}`,
+                date: `Dec ${(i % 28) + 1}, 2025`,
                 category: i % 2 === 0 ? "Poetry" : "Essays",
-                excerpt: "Wandering through the digital corridors of memory in the year 2026...",
-                content: `An archive piece from ${year}. Malel continues to explore the intersections of desire, grief, and the modern human condition.`,
-                featured: false
+                excerpt: "Deeper explorations from the Malel archive...",
+                content: `An archive piece from 2025. Malel continues to explore the intersections of desire, power, and the modern human condition.`,
+                featured: false,
+                likes: Math.floor(Math.random() * 20),
+                comments: []
             });
         }
 
         function init() {
             renderFeatured();
             renderFeed(allWorks);
-            document.getElementById('post-count').innerText = `${allWorks.length} pieces`;
+            document.getElementById('post-count').innerText = `${allWorks.length} items`;
         }
 
         function renderFeatured() {
@@ -390,9 +405,13 @@ My cheeks are pressed firmly on the glass covering the idiots face and I think I
                                 <span>${work.date}</span>
                                 <span class="w-1 h-1 bg-rose-600 rounded-full"></span>
                                 <span class="text-rose-500">${work.category}</span>
+                                <span class="ml-auto text-rose-500/60 flex items-center gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18L12 21z"/></svg>
+                                    ${work.likes}
+                                </span>
                             </div>
                             <h3 class="text-2xl font-bold mb-3 group-hover:text-rose-500 transition-colors serif">${work.title}</h3>
-                            <p class="text-gray-400 leading-relaxed line-clamp-3">${work.excerpt}</p>
+                            <p class="text-gray-400 leading-relaxed line-clamp-3 italic">"${work.excerpt}"</p>
                         </div>
                         ${work.image ? `
                         <div class="w-full md:w-48 h-32 rounded-lg overflow-hidden bg-zinc-900">
@@ -404,25 +423,91 @@ My cheeks are pressed firmly on the glass covering the idiots face and I think I
         }
 
         function openReader(id) {
+            currentWorkId = id;
             const work = allWorks.find(w => w.id.toString() === id.toString());
             if (!work) return;
+
             const content = document.getElementById('reader-content');
             content.innerHTML = `
                 <div class="mb-4 text-rose-500 font-bold uppercase tracking-widest text-sm">${work.category}</div>
                 <h1 class="text-4xl md:text-5xl font-black mb-6 serif leading-tight">${work.title}</h1>
                 <div class="flex items-center gap-4 mb-10 text-gray-500 border-y border-white/10 py-4">
-                    <div class="w-12 h-12 rounded-full bg-rose-600 flex items-center justify-center font-bold text-white text-xl">M</div>
+                    <div class="w-12 h-12 rounded-full bg-rose-600 flex items-center justify-center font-bold text-white text-xl shadow-lg">M</div>
                     <div>
                         <p class="text-white font-bold">Malel</p>
                         <p class="text-xs">${work.date} &bull; 2026 Original</p>
                     </div>
                 </div>
-                <div class="post-content serif text-gray-200">
-                    ${work.content}
-                </div>
+                <div class="post-content serif text-gray-200">${work.content}</div>
             `;
+
+            renderInteraction(work);
+
             document.getElementById('reader-overlay').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
+            document.getElementById('reader-overlay').scrollTop = 0;
+        }
+
+        function renderInteraction(work) {
+            document.getElementById('like-count').innerText = work.likes;
+            const likeBtn = document.getElementById('like-btn-main');
+            if (work.isLiked) {
+                likeBtn.classList.add('liked-btn');
+            } else {
+                likeBtn.classList.remove('liked-btn');
+            }
+
+            const list = document.getElementById('comments-list');
+            if (work.comments.length === 0) {
+                list.innerHTML = '<p class="text-zinc-600 italic text-sm serif">No comments yet. Be the first to share your thoughts.</p>';
+            } else {
+                list.innerHTML = work.comments.map(c => `
+                    <div class="bg-zinc-900/50 p-6 rounded-2xl border border-white/5 animate-fade">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-rose-500 font-bold text-xs uppercase tracking-widest">${c.name}</span>
+                            <span class="text-zinc-600 text-[10px]">${c.date}</span>
+                        </div>
+                        <p class="text-zinc-300 text-sm serif leading-relaxed">${c.text}</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function handleLike() {
+            const work = allWorks.find(w => w.id.toString() === currentWorkId.toString());
+            if (!work) return;
+
+            if (work.isLiked) {
+                work.likes--;
+                work.isLiked = false;
+            } else {
+                work.likes++;
+                work.isLiked = true;
+            }
+
+            renderInteraction(work);
+            renderFeed(allWorks); // Update counts on main feed
+        }
+
+        function submitComment() {
+            const nameInput = document.getElementById('comment-author');
+            const textInput = document.getElementById('comment-text');
+            
+            if (!nameInput.value || !textInput.value) return;
+
+            const work = allWorks.find(w => w.id.toString() === currentWorkId.toString());
+            if (!work) return;
+
+            const newComment = {
+                name: nameInput.value,
+                text: textInput.value,
+                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            };
+
+            work.comments.unshift(newComment);
+            nameInput.value = '';
+            textInput.value = '';
+            renderInteraction(work);
         }
 
         function closeReader() {
@@ -436,6 +521,7 @@ My cheeks are pressed firmly on the glass covering the idiots face and I think I
             if(isActive) {
                 document.getElementById('search-input').value = '';
                 document.getElementById('search-results').innerHTML = '';
+                document.getElementById('search-results').classList.add('hidden');
                 document.getElementById('search-input').focus();
             }
         }
@@ -444,6 +530,7 @@ My cheeks are pressed firmly on the glass covering the idiots face and I think I
             const resultsBox = document.getElementById('search-results');
             if(!query) {
                 resultsBox.innerHTML = '';
+                resultsBox.classList.add('hidden');
                 return;
             }
             const filtered = allWorks.filter(w => 
@@ -451,15 +538,16 @@ My cheeks are pressed firmly on the glass covering the idiots face and I think I
                 w.content.toLowerCase().includes(query.toLowerCase())
             ).slice(0, 10);
 
+            resultsBox.classList.remove('hidden');
             resultsBox.innerHTML = filtered.map(w => `
                 <div class="p-4 border-b border-white/5 hover:bg-rose-600/10 cursor-pointer transition-all flex justify-between items-center group" onclick="toggleSearch(); openReader('${w.id}')">
                     <div>
-                        <h4 class="font-bold text-base group-hover:text-rose-500 transition-colors">${w.title}</h4>
-                        <p class="text-xs text-zinc-500 uppercase tracking-widest mt-1">${w.category} &bull; ${w.date}</p>
+                        <h4 class="font-bold text-sm group-hover:text-rose-500 transition-colors tracking-tight">${w.title}</h4>
+                        <p class="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">${w.category} &bull; ${w.date}</p>
                     </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" class="text-zinc-700 group-hover:text-rose-500 transition-colors"><path d="m9 18 6-6-6-6"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" class="text-zinc-700 group-hover:text-rose-500 transition-colors"><path d="m9 18 6-6-6-6"/></svg>
                 </div>
-            `).join('') || '<p class="text-center text-zinc-600 py-8 text-sm italic">Nothing found in the archives.</p>';
+            `).join('') || '<p class="text-center text-zinc-600 py-6 text-xs italic">Nothing found in the archives.</p>';
         }
 
         window.onload = init;
