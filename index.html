@@ -30,6 +30,7 @@
             height: 100vh;
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
         }
         .snap-section {
             scroll-snap-align: start;
@@ -47,6 +48,7 @@
             gap: 1.5rem;
             padding: 1rem 0 2rem 0;
             -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
         }
         .scroll-item {
             flex: 0 0 85%;
@@ -105,12 +107,6 @@
         }
         .animate-fade { animation: fadeIn 0.3s ease forwards; }
 
-        /* Subscriber Badge */
-        .premium-badge {
-            background: linear-gradient(45deg, #E11D48, #be123c);
-            box-shadow: 0 0 15px rgba(225, 29, 72, 0.4);
-        }
-
         .liked-btn {
             color: var(--brand-red) !important;
             fill: var(--brand-red);
@@ -120,10 +116,10 @@
 <body class="pb-24">
 
     <!-- Header -->
-    <header class="p-6 flex justify-between items-center fixed top-0 w-full bg-gradient-to-b from-[#0F0F0F] to-transparent z-40">
-        <h1 class="text-3xl font-black tracking-tighter text-rose-600 cursor-pointer" onclick="document.querySelector('.snap-container').scrollTo({top: 0, behavior: 'smooth'})">MALEL</h1>
-        <button onclick="toggleSearch()" class="p-3 glass-nav rounded-full hover:bg-rose-600/10 transition-colors shadow-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    <header class="p-4 md:p-6 flex justify-between items-center fixed top-0 w-full bg-gradient-to-b from-[#0F0F0F] to-transparent z-40">
+        <h1 class="text-2xl md:text-3xl font-black tracking-tighter text-rose-600 cursor-pointer" onclick="document.querySelector('.snap-container').scrollTo({top: 0, behavior: 'smooth'})">MALEL</h1>
+        <button onclick="toggleSearch()" class="p-2 md:p-3 glass-nav rounded-full hover:bg-rose-600/10 transition-colors shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="md:w-5 md:h-5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         </button>
     </header>
 
@@ -131,7 +127,7 @@
     <div class="snap-container">
         
         <!-- SECTION 1: Featured -->
-        <section class="snap-section px-6 pt-24 max-w-6xl mx-auto">
+        <section class="snap-section px-4 md:px-6 pt-20 md:pt-24 max-w-6xl mx-auto">
             <h2 class="text-xs uppercase tracking-widest text-rose-500 font-bold mb-4">Latest Releases &bull; 2026</h2>
             <div class="horizontal-scroll-container" id="featured-list">
                 <!-- Dynamically filled -->
@@ -139,77 +135,23 @@
         </section>
 
         <!-- SECTION 2: Feed -->
-        <section id="archive-section" class="snap-section px-6 py-24">
+        <section id="archive-section" class="snap-section px-4 md:px-6 py-16 md:py-24">
             <div class="max-w-4xl mx-auto w-full">
                 <div class="flex items-baseline justify-between mb-8 border-b border-rose-600/30 pb-2">
-                    <h2 class="text-2xl font-bold uppercase tracking-tighter">The Full Archive</h2>
-                    <span class="text-sm text-rose-500 font-mono" id="post-count">... items</span>
+                    <h2 class="text-xl md:text-2xl font-bold uppercase tracking-tighter">The Full Archive</h2>
+                    <span class="text-xs md:text-sm text-rose-500 font-mono" id="post-count">... items</span>
                 </div>
-                <div id="posts-feed" class="space-y-12">
+                <div id="posts-feed" class="space-y-8 md:space-y-12">
                     <!-- Posts will be injected here -->
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 3: Series -->
-        <section id="series-section" class="snap-section px-6 py-24 bg-zinc-950/50">
-            <div class="max-w-5xl mx-auto w-full">
-                <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-                    <div>
-                        <h2 class="text-4xl font-black mb-2 tracking-tight">The Series</h2>
-                        <p class="text-rose-500 font-mono text-xs uppercase tracking-widest italic">Subscriber Exclusive: Limited Works</p>
-                    </div>
-                    <div class="glass-nav px-6 py-3 rounded-2xl border border-rose-600/20 max-w-sm">
-                        <p class="text-[10px] text-gray-500 uppercase font-bold mb-1 tracking-widest">Follower Access</p>
-                        <p class="text-sm text-gray-300">Subscribe below to unlock limited series and get email notifications for new work.</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Limited Series Cards -->
-                    <div class="group relative aspect-[4/5] rounded-3xl overflow-hidden border border-white/5 bg-zinc-900 cursor-pointer shadow-2xl">
-                        <div class="absolute inset-0 bg-rose-900/60 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center p-6 text-center">
-                            <span class="text-white font-black text-xs uppercase tracking-widest border-2 border-white px-4 py-2">Join Inner Circle to Unlock</span>
-                        </div>
-                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover opacity-50">
-                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
-                            <div class="premium-badge w-fit px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-3">Limited</div>
-                            <h3 class="text-2xl font-bold serif">The Salt Cycles</h3>
-                            <p class="text-sm text-gray-400 mt-2">12 Raw Poems on Grief</p>
-                        </div>
-                    </div>
-                    <!-- Series 2 -->
-                    <div class="group relative aspect-[4/5] rounded-3xl overflow-hidden border border-white/5 bg-zinc-900 cursor-pointer shadow-2xl">
-                        <div class="absolute inset-0 bg-rose-900/60 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center p-6 text-center">
-                            <span class="text-white font-black text-xs uppercase tracking-widest border-2 border-white px-4 py-2">Join Inner Circle to Unlock</span>
-                        </div>
-                        <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover opacity-50">
-                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
-                            <div class="premium-badge w-fit px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-3">Limited</div>
-                            <h3 class="text-2xl font-bold serif">Urban Echoes</h3>
-                            <p class="text-sm text-gray-400 mt-2">Nairobi Midnight Stories</p>
-                        </div>
-                    </div>
-                    <!-- Series 3 -->
-                    <div class="group relative aspect-[4/5] rounded-3xl overflow-hidden border border-white/5 bg-zinc-900 cursor-pointer shadow-2xl">
-                        <div class="absolute inset-0 bg-rose-900/60 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center p-6 text-center">
-                            <span class="text-white font-black text-xs uppercase tracking-widest border-2 border-white px-4 py-2">Join Inner Circle to Unlock</span>
-                        </div>
-                        <img src="https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover opacity-50">
-                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
-                            <div class="premium-badge w-fit px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-3">New</div>
-                            <h3 class="text-2xl font-bold serif">Pretense & Fate</h3>
-                            <p class="text-sm text-gray-400 mt-2">The Unseen Conversations</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 4: Waiting List / Footer -->
-        <footer class="snap-section px-6 py-24 bg-zinc-950 border-t border-rose-600/20">
+        <!-- SECTION 3: Waiting List / Footer -->
+        <footer class="snap-section px-4 md:px-6 py-16 md:py-24 bg-zinc-950 border-t border-rose-600/20">
             <div class="max-w-2xl mx-auto text-center">
-                <h2 class="text-4xl font-black mb-4 tracking-tighter serif">Join Malel's Inner Circle</h2>
-                <p class="text-gray-400 mb-12">Subscribers receive exclusive access to limited works and email notifications whenever a new piece is added.</p>
+                <h2 class="text-3xl md:text-4xl font-black mb-4 tracking-tighter serif">Join Malel's Inner Circle</h2>
+                <p class="text-sm md:text-base text-gray-400 mb-8 md:mb-12">Subscribers receive exclusive access to limited works and email notifications whenever a new piece is added.</p>
                 
                 <form action="https://formsubmit.co/ivycheruto30@gmail.com" method="POST" class="space-y-4">
                     <input type="hidden" name="_subject" value="New Malel Inner Circle Subscriber!">
@@ -217,14 +159,14 @@
                     
                     <div class="flex flex-col md:flex-row gap-4">
                         <input type="email" name="email" required placeholder="your.email@example.com" 
-                            class="flex-1 bg-zinc-900 border border-white/10 px-6 py-4 rounded-full text-white focus:outline-none transition-all focus:border-rose-600">
-                        <button type="submit" class="bg-rose-600 hover:bg-rose-700 px-10 py-4 rounded-full font-black text-sm uppercase tracking-widest transition-all">
+                            class="flex-1 bg-zinc-900 border border-white/10 px-4 md:px-6 py-3 md:py-4 rounded-full text-sm md:text-base text-white focus:outline-none transition-all focus:border-rose-600">
+                        <button type="submit" class="bg-rose-600 hover:bg-rose-700 px-8 md:px-10 py-3 md:py-4 rounded-full font-black text-xs md:text-sm uppercase tracking-widest transition-all">
                             Subscribe
                         </button>
                     </div>
                 </form>
                 
-                <div class="mt-24 pt-12 border-t border-white/5 text-gray-600 text-xs tracking-widest uppercase">
+                <div class="mt-16 md:mt-24 pt-8 md:pt-12 border-t border-white/5 text-gray-600 text-xs tracking-widest uppercase">
                     &copy; 2026 Malel Creative. All rights reserved.
                 </div>
             </div>
@@ -232,38 +174,38 @@
     </div>
 
     <!-- Reader Overlay -->
-    <div id="reader-overlay" class="fixed inset-0 bg-[#0F0F0F] z-50 overflow-y-auto hidden">
-        <div class="max-w-2xl mx-auto px-6 py-12">
-            <button onclick="closeReader()" class="mb-8 flex items-center gap-2 text-rose-500 font-bold hover:text-rose-400 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
-                BACK TO FEED
+    <div id="reader-overlay" class="fixed inset-0 bg-[#0F0F0F] z-50 overflow-y-auto hidden" style="scroll-behavior: smooth;">
+        <div class="max-w-2xl mx-auto px-4 md:px-6 py-8 md:py-12">
+            <button onclick="closeReader()" class="mb-6 md:mb-8 flex items-center gap-2 text-rose-500 font-bold hover:text-rose-400 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="md:w-5 md:h-5"><path d="m15 18-6-6 6-6"/></svg>
+                <span class="text-sm md:text-base">BACK TO FEED</span>
             </button>
             <article id="reader-content">
                 <!-- Content injected here -->
             </article>
 
             <!-- Interaction Section -->
-            <div id="interaction-section" class="mt-16 pt-12 border-t border-white/10">
-                <div class="flex items-center gap-6 mb-12">
+            <div id="interaction-section" class="mt-12 md:mt-16 pt-8 md:pt-12 border-t border-white/10">
+                <div class="flex items-center gap-4 md:gap-6 mb-8 md:mb-12">
                     <button id="like-btn-main" onclick="handleLike()" class="flex items-center gap-2 text-zinc-400 hover:text-rose-500 transition-all font-bold group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon group-active:scale-125 transition-transform"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.505 4.04 3 5.5L12 21l7-7z"/></svg>
-                        <span id="like-count">0</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon group-active:scale-125 transition-transform md:w-6 md:h-6"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.505 4.04 3 5.5L12 21l7-7z"/></svg>
+                        <span id="like-count" class="text-sm md:text-base">0</span>
                     </button>
-                    <div class="text-zinc-500 text-sm italic serif">Tell the author what you think.</div>
+                    <div class="text-zinc-500 text-xs md:text-sm italic serif">Tell the author what you think.</div>
                 </div>
 
                 <!-- Comment Form -->
-                <div class="mb-12">
-                    <h3 class="text-lg font-bold mb-4 uppercase tracking-widest text-zinc-400 text-xs">Post a Comment</h3>
-                    <div class="space-y-4">
-                        <input type="text" id="comment-author" placeholder="Your Name" class="w-full bg-zinc-900 border border-white/5 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors">
-                        <textarea id="comment-text" rows="3" placeholder="Write your thoughts..." class="w-full bg-zinc-900 border border-white/5 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors"></textarea>
-                        <button onclick="submitComment()" class="bg-zinc-100 text-black px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest hover:bg-rose-600 hover:text-white transition-all">Submit</button>
+                <div class="mb-8 md:mb-12">
+                    <h3 class="text-base md:text-lg font-bold mb-4 uppercase tracking-widest text-zinc-400 text-xs">Post a Comment</h3>
+                    <div class="space-y-3 md:space-y-4">
+                        <input type="text" id="comment-author" placeholder="Your Name" class="w-full bg-zinc-900 border border-white/5 rounded-xl px-3 md:px-4 py-2 md:py-3 text-sm focus:outline-none transition-colors">
+                        <textarea id="comment-text" rows="3" placeholder="Write your thoughts..." class="w-full bg-zinc-900 border border-white/5 rounded-xl px-3 md:px-4 py-2 md:py-3 text-sm focus:outline-none transition-colors"></textarea>
+                        <button onclick="submitComment()" class="bg-zinc-100 text-black px-5 md:px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest hover:bg-rose-600 hover:text-white transition-all">Submit</button>
                     </div>
                 </div>
 
                 <!-- Comments List -->
-                <div id="comments-list" class="space-y-6">
+                <div id="comments-list" class="space-y-4 md:space-y-6">
                     <!-- Comments injected here -->
                 </div>
             </div>
@@ -282,23 +224,108 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
                 </button>
             </div>
-            <div id="search-results" class="mt-3 glass-nav rounded-3xl overflow-hidden max-h-[50vh] overflow-y-auto shadow-2xl border border-rose-600/10 hidden"></div>
+            <div id="search-results" class="mt-3 glass-nav rounded-3xl overflow-hidden max-h-[50vh] overflow-y-auto shadow-2xl border border-rose-600/10 hidden" style="scroll-behavior: smooth;"></div>
+        </div>
+    </div>
+
+    <!-- About Page Overlay -->
+    <div id="about-overlay" class="fixed inset-0 bg-[#0F0F0F] z-50 overflow-y-auto hidden" style="scroll-behavior: smooth;">
+        <div class="max-w-4xl mx-auto px-4 md:px-6 py-8 md:py-12">
+            <button onclick="closeAbout()" class="mb-6 md:mb-8 flex items-center gap-2 text-rose-500 font-bold hover:text-rose-400 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="md:w-5 md:h-5"><path d="m15 18-6-6 6-6"/></svg>
+                <span class="text-sm md:text-base">BACK TO HOME</span>
+            </button>
+
+            <!-- Profile Section -->
+            <div class="flex flex-col md:flex-row gap-8 md:gap-12 items-start mb-12 md:mb-16">
+                <div class="w-full md:w-1/3">
+                    <div class="relative aspect-square rounded-3xl overflow-hidden border-4 border-rose-600/30 shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=800" 
+                             alt="Malel" 
+                             class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    </div>
+                </div>
+
+                <div class="flex-1">
+                    <h1 class="text-4xl md:text-5xl font-black mb-3 md:mb-4 tracking-tighter serif">Malel</h1>
+                    <p class="text-rose-500 font-bold text-xs md:text-sm uppercase tracking-widest mb-4 md:mb-6">Creative Writer • Poet • Storyteller</p>
+                    
+                    <div class="space-y-3 md:space-y-4 text-gray-300 leading-relaxed serif text-base md:text-lg">
+                        <p>
+                            Malel is a Kenyan creative writer who explores the raw, unfiltered intersections of desire, power, and human vulnerability. Her work unapologetically delves into the darkness we often hide, the contradictions we live with, and the intensity of modern relationships.
+                        </p>
+                        <p>
+                            Through prose and poetry, she captures the complexity of love, lust, and longing—the kind that doesn't fit neatly into boxes. Her writing is visceral, honest, and unflinching, inviting readers to confront their own shadows while finding beauty in the chaos.
+                        </p>
+                        <p>
+                            Based in Nairobi, Malel writes about the tension between tradition and rebellion, control and surrender, attachment and freedom. Her voice is distinctly East African yet universally human—speaking to anyone who has ever felt caught between who they are and who they're expected to be.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Writing Philosophy -->
+            <div class="border-t border-rose-600/20 pt-8 md:pt-12">
+                <h2 class="text-2xl md:text-3xl font-black mb-4 md:mb-6 tracking-tighter">On Creative Writing</h2>
+                <div class="grid md:grid-cols-2 gap-4 md:gap-8">
+                    <div class="glass-nav p-4 md:p-6 rounded-2xl border border-rose-600/10">
+                        <h3 class="text-rose-500 font-bold text-xs md:text-sm uppercase tracking-widest mb-2 md:mb-3">The Dark & The Light</h3>
+                        <p class="text-gray-400 serif leading-relaxed text-sm md:text-base">
+                            "I write in the spaces between propriety and desire. My work explores what happens when we stop pretending—when we acknowledge the pull of forbidden things, the ache of unfulfilled longing, the power dynamics we rarely discuss."
+                        </p>
+                    </div>
+
+                    <div class="glass-nav p-4 md:p-6 rounded-2xl border border-rose-600/10">
+                        <h3 class="text-rose-500 font-bold text-xs md:text-sm uppercase tracking-widest mb-2 md:mb-3">Authenticity Over Comfort</h3>
+                        <p class="text-gray-400 serif leading-relaxed text-sm md:text-base">
+                            "My stories aren't meant to comfort—they're meant to resonate. If you've felt the thrill of doing something you shouldn't, the pain of wanting someone who hurts you, the loneliness of being misunderstood—you'll find yourself in my words."
+                        </p>
+                    </div>
+
+                    <div class="glass-nav p-4 md:p-6 rounded-2xl border border-rose-600/10">
+                        <h3 class="text-rose-500 font-bold text-xs md:text-sm uppercase tracking-widest mb-2 md:mb-3">Poetry & Prose</h3>
+                        <p class="text-gray-400 serif leading-relaxed text-sm md:text-base">
+                            "Poetry captures the emotional truth in fragments. Prose builds the world where those emotions live. Together, they paint a complete picture of what it means to be human—messy, contradictory, and beautifully flawed."
+                        </p>
+                    </div>
+
+                    <div class="glass-nav p-4 md:p-6 rounded-2xl border border-rose-600/10">
+                        <h3 class="text-rose-500 font-bold text-xs md:text-sm uppercase tracking-widest mb-2 md:mb-3">The Nairobi Voice</h3>
+                        <p class="text-gray-400 serif leading-relaxed text-sm md:text-base">
+                            "My work is rooted in the Kenyan experience but speaks a universal language. The city nights, the cultural tensions, the way we navigate modern love while carrying ancestral expectations—this is the backdrop of my stories."
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="border-t border-rose-600/20 pt-8 md:pt-12 mt-8 md:mt-12">
+                <h2 class="text-2xl md:text-3xl font-black mb-4 md:mb-6 tracking-tighter">Connect</h2>
+                <p class="text-gray-400 mb-4 md:mb-6 serif text-sm md:text-base">
+                    Join the inner circle to receive new works, exclusive content, and updates directly to your inbox.
+                </p>
+                <a href="#subscribe" onclick="closeAbout(); document.querySelector('.snap-container').scrollTo({top: document.querySelector('.snap-container').scrollHeight, behavior: 'smooth'})" 
+                   class="inline-block bg-rose-600 hover:bg-rose-700 px-6 md:px-8 py-2 md:py-3 rounded-full font-black text-xs md:text-sm uppercase tracking-widest transition-all">
+                    Subscribe to Updates
+                </a>
+            </div>
         </div>
     </div>
 
     <!-- Navigation -->
-    <nav class="glass-nav fixed bottom-6 left-1/2 -translate-x-1/2 z-40 px-8 py-4 rounded-full flex justify-around items-center gap-12 border border-rose-600/10 shadow-2xl">
+    <nav class="glass-nav fixed bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-40 px-4 md:px-8 py-3 md:py-4 rounded-full flex justify-around items-center gap-6 md:gap-12 border border-rose-600/10 shadow-2xl">
         <button onclick="document.querySelector('.snap-container').scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center gap-1 text-rose-500 hover:scale-110 transition-transform">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-            <span class="text-[9px] font-black uppercase tracking-tighter">Home</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" class="md:w-5 md:h-5"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span class="text-[8px] md:text-[9px] font-black uppercase tracking-tighter">Home</span>
         </button>
         <button onclick="toggleSearch()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-rose-400 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            <span class="text-[9px] font-black uppercase tracking-tighter">Search</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="md:w-5 md:h-5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <span class="text-[8px] md:text-[9px] font-black uppercase tracking-tighter">Search</span>
         </button>
-        <button onclick="document.getElementById('series-section').scrollIntoView({behavior: 'smooth'})" class="flex flex-col items-center gap-1 text-gray-500 hover:text-rose-400 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21v-8m0 0 4 4m-4-4-4 4M4 7h16"/></svg>
-            <span class="text-[9px] font-black uppercase tracking-tighter">Series</span>
+        <button onclick="openAbout()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-rose-400 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="md:w-5 md:h-5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span class="text-[8px] md:text-[9px] font-black uppercase tracking-tighter">About</span>
         </button>
     </nav>
 
@@ -317,7 +344,8 @@
                 image: "https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?auto=format&fit=crop&q=80&w=800",
                 likes: 42,
                 comments: [
-                    { name: "Sasha", text: "This is hauntingly beautiful.", date: "Feb 11, 2026" }
+                    { name: "Sasha", text: "This is hauntingly beautiful.", date: "Feb 11, 2026" },
+                    { name: "Amara", text: "The rawness of this... I felt every word. Malel, you're fearless.", date: "Feb 10, 2026" }
                 ]
             },
             {
@@ -330,7 +358,9 @@
                 featured: true,
                 image: "https://images.unsplash.com/photo-1511216335778-7cb8f49fa7a3?auto=format&fit=crop&q=80&w=800",
                 likes: 28,
-                comments: []
+                comments: [
+                    { name: "Kendi", text: "The tension you create is unmatched. I held my breath through the entire piece.", date: "Feb 11, 2026" }
+                ]
             },
             {
                 id: 'p_friends',
@@ -338,11 +368,55 @@
                 date: "Feb 11, 2026",
                 category: "Poetry",
                 excerpt: "He and I are pretenders; I love him, I want to have him...",
-                content: `He and I are pretenders; I love him, I want to have him, Impress him, Take him. \n\n I can't. Fate doesn't say that. For this reason, I am stuck in this lope. The lope called friendship. \n\n On his end, I think; I am a means for him. There's a path I open. I am not a need or a want. I am a wind. I am needed when I am needed. So he keeps me around. \n\n I am a destructive energy. I am a powerful hurricane. Now I am kept at arm's length. Even far as possible. Boxed and used when needed. \n\n When I finally went down, When my energy died, When I stopped being, Powerful, destructive and a whirl: Two things: I was alone and lonely! \n\n He is not a fun of pretense. I am not a fun of lying. But: He pretends and I do also, I lie and he does also. \n\n Sometimes those monsters we hate, We are there representation! \n\n @Malel_`,
+                content: `He and I are pretenders;
+I love him,
+I want to have him,
+Impress him,
+Take him.
+
+I can't.
+Fate doesn't say that.
+For this reason,
+I am stuck in this lope.
+The lope called friendship.
+
+On his end, I think;
+I am a means for him.
+There's a path I open.
+I am not a need or a want.
+I am a wind.
+I am needed when I am needed.
+So he keeps me around.
+
+I am a destructive energy.
+I am a powerful hurricane.
+Now I am kept at arm's length.
+Even far as possible.
+Boxed and used when needed.
+
+When I finally went down,
+When my energy died,
+When I stopped being,
+Powerful, destructive and a whirl:
+Two things:
+I was alone and lonely!
+
+He is not a fun of pretense.
+I am not a fun of lying.
+But:
+He pretends and I do also,
+I lie and he does also.
+
+Sometimes those monsters we hate,
+We are there representation!
+
+@Malel_`,
                 featured: true,
                 image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&q=80&w=800",
                 likes: 56,
-                comments: []
+                comments: [
+                    { name: "Njeri", text: "This hit different. The truth in 'I am a wind' - felt that deep.", date: "Feb 11, 2026" }
+                ]
             },
             {
                 id: 'p0',
@@ -350,28 +424,167 @@
                 date: "Feb 11, 2026",
                 category: "Poetry",
                 excerpt: "It is time, He got a new phone, Moved to a new place...",
-                content: `It is time, He got a new phone, Moved to a new place And got himself a better girl. \n\n Our conversations, pictures and wallpapers, All our memories gone with the phone. The room with our scents rented to someone else. My touch on his skin replaced. \n\n It is time. Time to move on. Forget all the good times. Forget his touch. \n\n It is time. Time to breath fresh air. Time to live in my skin. Time to love life. \n\n I am enclosed in a block. I can not breath. I can not see another. Yet I can write. \n\n What is the point of writing If he's not there to read, If he's not there to feel the words, If he's not there to accept the emotions. \n\n @Malel_`,
+                content: `It is time,
+He got a new phone,
+Moved to a new place
+And got himself a better girl.
+
+Our conversations, pictures and wallpapers,
+All our memories gone with the phone.
+The room with our scents rented to someone else.
+My touch on his skin replaced.
+
+It is time.
+Time to move on.
+Forget all the good times.
+Forget his touch.
+
+It is time.
+Time to breath fresh air.
+Time to live in my skin.
+Time to love life.
+
+I am enclosed in a block.
+I can not breath.
+I can not see another.
+Yet I can write.
+
+What is the point of writing
+If he's not there to read,
+If he's not there to feel the words,
+If he's not there to accept the emotions.
+
+@Malel_`,
                 featured: true,
                 image: "https://images.unsplash.com/photo-1499209974431-9dac3adaf471?auto=format&fit=crop&q=80&w=800",
                 likes: 89,
-                comments: []
+                comments: [
+                    { name: "Maya", text: "The last stanza broke me. Writing into the void... we've all been there.", date: "Feb 10, 2026" }
+                ]
+            },
+            {
+                id: 'p_5k_reason',
+                title: "5K REASON WHY",
+                date: "Feb 10, 2026",
+                category: "Poetry",
+                excerpt: "I might have been in too deep, I fell down a hole once...",
+                content: `I might have been in too deep
+I fell down a hole once,
+I told myself
+"You can see the light,
+You can climb out of here."
+Well I lied to myself.
+
+I had a torch light
+It was strapped on my head,
+It was facing my eyes
+While I thought I was just on the surface
+My own hands were digging me deeper
+
+I remember asking a frog in the hole,
+"Can I be in love with a friend?"
+The frog was so direct and charming.
+"Yes you can be in love.
+However, the torch light might go off"
+I did not understand at first.
+
+I kept digging.
+Digging deeper
+A small bird that had been with me
+Fell in and he kissed me
+Truth in it the torch light got dim
+It dimmed until it became dark.
+
+I discovered the distance from the surface was no longer close
+The bird flew back home
+I was left alone.
+I called for someone but no one came
+
+That's when I understood,
+I was delusional.
+I thought that the torch light would always be there
+I thought the bird will abandon his home
+To stay with me
+I thought I could have a torch for my path way,
+A bird for company and a frog to support me
+
+I was wrong.
+I lost the bird.
+I lost the torch.
+The frog remained insulting me.
+
+@Malel`,
+                featured: true,
+                image: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&q=80&w=800",
+                likes: 67,
+                comments: [
+                    { name: "Zuri", text: "The metaphor of digging yourself deeper while thinking you're climbing... devastating and so real.", date: "Feb 10, 2026" }
+                ]
+            },
+            {
+                id: 'p_move_on_honey',
+                title: "MOVE ON (Honey)",
+                date: "Feb 9, 2026",
+                category: "Poetry",
+                excerpt: "Its just this one time; I will do it just once...",
+                content: `Its just this one time;
+I will do it just once.
+I won't ever try it again.
+Dip a finger, just once
+
+I dipped my finger in the jar,
+The honey was sweet.
+I dipped it again, again and again.
+God; it was so sweet.
+
+Was it sweet though?
+His hands on my body was,
+His eyes looking at me. And.
+His steady rhythmic heartbeat.
+
+Even while tasting the honey,
+Somewhere deep in my mind,
+I knew without a doubt,
+The honey jar will be empty soon.
+
+I would go back home,
+Smelling like betrayal.
+I will loose him.
+The one I chose.
+
+Yet I cannot stop,
+I cannot control myself,
+I lie, I haven't dipped the whole hand;
+It's just the adrenaline.
+Is it though?
+
+@Malel`,
+                featured: true,
+                image: "https://images.unsplash.com/photo-1587049352846-4a222e784587?auto=format&fit=crop&q=80&w=800",
+                likes: 73,
+                comments: [
+                    { name: "Imani", text: "The honey jar metaphor is perfect. We all know when we're lying to ourselves.", date: "Feb 9, 2026" }
+                ]
+            },
+            {
+                id: 'prose_hangout',
+                title: "THE HANGOUT",
+                date: "Feb 8, 2026",
+                category: "Prose",
+                excerpt: "In the ventures of my youthfulness I once met a group of people...",
+                content: `In the ventures of my youthfulness I once met a group of people. My group of people found joy in the dark desires that the cold unmistakable bitter drink brought. They were always happy and smiling. Anyone and everyone believed that charade, that they were okay. Who would not when they were all the positivity one needed in this life? Their hearts were all shades of fucked up and burden some but that drink, that action, brought a spark of doubt, a spark of treachery and a spark of wickedness. They had a cold aura in there eyes and a promise always lacked in the darkness of there's eyes that was always sinful and devil led. Before I met them, I was also a victim of the goodness they paraded around. I trusted they were the field of roses I neeed and fell hard and deep for them. Only when I was caught up in the web of deception malice and wrath did I realize I was beyond redemption.
+
+I could detangle myself and play pretend with my dolls at home but all fallen angels felt they were home when they finally reached the depths of hell. In the outside we looked like we were good people but I knew and they knew. The charade continues, they look friendly and approachable on the outside but when you are the one holding the web every single transmission passes through you. Classism, sexism, betrayal, drugs, sex and worst of all treachery upon treachery. All this coated in the beautiful golden cup called friendship. To what do you owe such people? Someone asks.
+
+Love. Your siblings will destroy you but build you up. They will always be the constant in your life and be there when the worst happened and in the campaign to put lucifer to his throne, in the war we fight for him, I found family in the fallen angels.`,
+                featured: true,
+                image: "https://images.unsplash.com/photo-1529310399831-ed472b81d589?auto=format&fit=crop&q=80&w=800",
+                likes: 51,
+                comments: [
+                    { name: "Thandiwe", text: "This dark exploration of toxic friendship... haunting. 'Family in the fallen angels' hit hard.", date: "Feb 8, 2026" }
+                ]
             }
         ];
-
-        // Seed archive
-        for(let i = 5; i <= 61; i++) {
-            allWorks.push({
-                id: i,
-                title: `Archive Fragment ${i}`,
-                date: `Dec ${(i % 28) + 1}, 2025`,
-                category: i % 2 === 0 ? "Poetry" : "Essays",
-                excerpt: "Deeper explorations from the Malel archive...",
-                content: `An archive piece from 2025. Malel continues to explore the intersections of desire, power, and the modern human condition.`,
-                featured: false,
-                likes: Math.floor(Math.random() * 20),
-                comments: []
-            });
-        }
 
         function init() {
             renderFeatured();
@@ -386,9 +599,9 @@
                 <div class="scroll-item group cursor-pointer" onclick="openReader('${work.id}')">
                     <div class="relative h-full w-full rounded-2xl overflow-hidden border border-white/5 bg-zinc-900 shadow-2xl">
                         <img src="${work.image || 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&q=80&w=800'}" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform duration-1000">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent p-8 flex flex-col justify-end">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent p-6 md:p-8 flex flex-col justify-end">
                             <span class="text-rose-500 font-bold text-xs mb-2 tracking-widest uppercase bg-rose-950/40 w-fit px-3 py-1 rounded-full">${work.category}</span>
-                            <h3 class="text-3xl font-bold leading-tight serif">${work.title}</h3>
+                            <h3 class="text-2xl md:text-3xl font-bold leading-tight serif">${work.title}</h3>
                         </div>
                     </div>
                 </div>
@@ -397,11 +610,11 @@
 
         function renderFeed(works) {
             const feed = document.getElementById('posts-feed');
-            feed.innerHTML = works.slice(0, 15).map(work => `
-                <article class="group cursor-pointer border-b border-white/5 pb-12 hover:border-rose-600/20 transition-colors" onclick="openReader('${work.id}')">
-                    <div class="flex flex-col md:flex-row gap-6">
+            feed.innerHTML = works.map(work => `
+                <article class="group cursor-pointer border-b border-white/5 pb-8 md:pb-12 hover:border-rose-600/20 transition-colors" onclick="openReader('${work.id}')">
+                    <div class="flex flex-col md:flex-row gap-4 md:gap-6">
                         <div class="flex-1">
-                            <div class="flex items-center gap-3 mb-3 text-xs font-bold text-gray-500 uppercase tracking-widest">
+                            <div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3 text-xs font-bold text-gray-500 uppercase tracking-widest">
                                 <span>${work.date}</span>
                                 <span class="w-1 h-1 bg-rose-600 rounded-full"></span>
                                 <span class="text-rose-500">${work.category}</span>
@@ -410,8 +623,8 @@
                                     ${work.likes}
                                 </span>
                             </div>
-                            <h3 class="text-2xl font-bold mb-3 group-hover:text-rose-500 transition-colors serif">${work.title}</h3>
-                            <p class="text-gray-400 leading-relaxed line-clamp-3 italic">"${work.excerpt}"</p>
+                            <h3 class="text-xl md:text-2xl font-bold mb-2 md:mb-3 group-hover:text-rose-500 transition-colors serif">${work.title}</h3>
+                            <p class="text-gray-400 leading-relaxed line-clamp-3 italic text-sm md:text-base">"${work.excerpt}"</p>
                         </div>
                         ${work.image ? `
                         <div class="w-full md:w-48 h-32 rounded-lg overflow-hidden bg-zinc-900">
@@ -429,16 +642,16 @@
 
             const content = document.getElementById('reader-content');
             content.innerHTML = `
-                <div class="mb-4 text-rose-500 font-bold uppercase tracking-widest text-sm">${work.category}</div>
-                <h1 class="text-4xl md:text-5xl font-black mb-6 serif leading-tight">${work.title}</h1>
-                <div class="flex items-center gap-4 mb-10 text-gray-500 border-y border-white/10 py-4">
-                    <div class="w-12 h-12 rounded-full bg-rose-600 flex items-center justify-center font-bold text-white text-xl shadow-lg">M</div>
+                <div class="mb-3 md:mb-4 text-rose-500 font-bold uppercase tracking-widest text-xs md:text-sm">${work.category}</div>
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-black mb-4 md:mb-6 serif leading-tight">${work.title}</h1>
+                <div class="flex items-center gap-3 md:gap-4 mb-8 md:mb-10 text-gray-500 border-y border-white/10 py-3 md:py-4">
+                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-rose-600 flex items-center justify-center font-bold text-white text-lg md:text-xl shadow-lg">M</div>
                     <div>
-                        <p class="text-white font-bold">Malel</p>
+                        <p class="text-white font-bold text-sm md:text-base">Malel</p>
                         <p class="text-xs">${work.date} &bull; 2026 Original</p>
                     </div>
                 </div>
-                <div class="post-content serif text-gray-200">${work.content}</div>
+                <div class="post-content serif text-gray-200 text-base md:text-lg">${work.content}</div>
             `;
 
             renderInteraction(work);
@@ -512,6 +725,17 @@
 
         function closeReader() {
             document.getElementById('reader-overlay').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function openAbout() {
+            document.getElementById('about-overlay').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('about-overlay').scrollTop = 0;
+        }
+
+        function closeAbout() {
+            document.getElementById('about-overlay').classList.add('hidden');
             document.body.style.overflow = 'auto';
         }
 
