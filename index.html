@@ -6,6 +6,11 @@
     <title>Malel | Creative Writer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
     <style>
         :root {
             --brand-red: #E11D48;
@@ -110,6 +115,25 @@
         .liked-btn {
             color: var(--brand-red) !important;
             fill: var(--brand-red);
+        }
+
+        /* Author badge */
+        .author-badge {
+            background: linear-gradient(45deg, #E11D48, #be123c);
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-left: 8px;
+        }
+
+        /* Reply form styles */
+        .reply-form {
+            margin-top: 12px;
+            padding-left: 20px;
+            border-left: 2px solid rgba(225, 29, 72, 0.3);
         }
     </style>
 </head>
@@ -330,7 +354,31 @@
     </nav>
 
     <script>
+        // ========================================
+        // FIREBASE CONFIGURATION
+        // ========================================
+        // TODO: Replace these with your actual Firebase config values
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+        apiKey: "AIzaSyCtZKeA_DERyfAQUfGddYEjS6iQRYVCKZY",
+        authDomain: "malel-creative.firebaseapp.com",
+        databaseURL: "https://malel-creative-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "malel-creative",
+        storageBucket: "malel-creative.firebasestorage.app",
+        messagingSenderId: "391798544085",
+        appId: "1:391798544085:web:b147dcde4260e7572e745c",
+        measurementId: "G-RVNJF2LQLC"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // ========================================
+        // DATA & STATE
+        // ========================================
         let currentWorkId = null;
+        const MALEL_EMAIL = 'ivycheruto30@gmail.com';
 
         const allWorks = [
             {
@@ -341,12 +389,7 @@
                 excerpt: "Some fat guy in my job died because he had a heart attack...",
                 content: `Some fat guy in my job died because he had a heart attack that was coming for him considering he was almost a hundred and fifty kilograms. Looked like a water tank. I am sure his legs couldn't carry him for more than a three minute walk. The people at my work said we should go to his funeral and everyone should bring a plus one. I was considering to bring one of my lady friends as a date but he heard about it. \n\n That was the end of that, he bought me a black bodycon, a big hat with a veil in it and beautiful black boots. He himself was dressed in all black suit and we looked like the angel of death. When we arrived at his home, his car tinted we sat in it for almost six minutes. He was claiming my mouth in that possessive obsessive way he does before we go out into the world. He also always makes sure to leave a bruise so that I can remember who owns me. Classic 19th century psycho and you ask why I am attracted to him. \n\n He raises my dress to my waist, so much for ironing it and lands his mouth in my inner thighs. He bites so hard that blood comes out. He licks the blood then arranges me and we get off. I don't understand the bite though. The funeral family has decided that they will leave the body inside the house for viewing then when it's time to burry it's when they will bring it out. We are the last ones to go to view his body and this is where I know he has no boundaries. I can see his boner and I know he's planning something shitty. \n\n The something shitty was bending me over the casket, both the entrance and exit door open and anyone could walk in, and sliding inside my wet pussy with ease because of the earlier make out session. He is slow and I have never been terrified in my life like that. His hands rub my inner thighs slowly and I swear time stops as he does that. My body responds to the terror and I become so slippery that I no longer feel him all I feel is as if something hard is sliding in me but more like with soap. \n\n My cheeks are pressed firmly on the glass covering the idiots face and I think I see him cry for a second because he is thrusting now in a ferocious way. My heart is pounding on my throat when one of his hands skate down to my clit to rub my it with his thumb in a circulation motion. The other hand goes to my hair and I am pulled back that I feel him hit my g spot so painfully and hard. I melt and he feels it as he increases his speed. \n\n I have been trying not to moan but the pressure on my throat and heart needs to be released and I try my best but we hear footsteps. I cry for him to let us go but he increases speed spills in me then I also cum before he draws my dress down and hugs me hiding his naked dick. I help him close up as I pretend to cry and him hugging him as the mother of the guy enters.`,
                 featured: true,
-                image: "https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?auto=format&fit=crop&q=80&w=800",
-                likes: 42,
-                comments: [
-                    { name: "Sasha", text: "This is hauntingly beautiful.", date: "Feb 11, 2026" },
-                    { name: "Amara", text: "The rawness of this... I felt every word. Malel, you're fearless.", date: "Feb 10, 2026" }
-                ]
+                image: "https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?auto=format&fit=crop&q=80&w=800"
             },
             {
                 id: 'prose_dining',
@@ -356,11 +399,7 @@
                 excerpt: "I am going to visit my friend, on the way there he calls. 'Where the fuck do you think you are going?'...",
                 content: `I am going to visit my friend, on the way there he calls. "Where the fuck do you think you are going?" he growls on my phone. I came to terms with the fact that he tracks me all the time. He also knows everyone I know and has forbidden me from visiting of engaging with some of them in any kind of relationship. He is a controlling manipulative son of a bitch that I am in love with. \n\n His breathing is controlled but I can visualize how his jaw Hardens cause I am going to visit one of my friends who actually is the worst. Why? To piss him off. He hasn't been talking to me and I miss him, why not add a bit drama. I could have said I miss him but I am Kenyan, I will never say shit like that. \n\n On my way to this friend I notice he has changed direction and he's heading towards me. It will take him another two hours to pull up to where I am. I park at my friend's parking lawn then walk in her house. She has already cooked and we dig in. After two hours of gossip and hot rage at my man he pulls up, enters the house rudely and I can see the danger in his eyes. His hands are balled into fists and his breathing is erratic. My body tenses and I raise my wine glass to calm down. \n\n The wine plus blood and any available liquid assembles at my core and I am wet instantly. His eyes move to my friend then to mine again, he moves across the room and invites himself to the the girls out. His hands land on my open thigh, I wore a mini skirt heels and a tank top with an overcoat but it was off now. His rage is fully displayed in the arms sucking the life out of my leg. They are imprinted on the thigh when he takes a carrot on the table, licks it then lowers it down, to my panty less pussy and shoves it in. \n\n My friend trys to argue that he's abusing food but one dark look and she's queit. I know this is going to happen here and now, my friend witnessing him humiliate me as he takes everything. He starts to move the carrot well inside and at a right speed then proceeds to order me to drink the wine on my glass. That, my friend helps with, as we all drink as if I am not being assaulted right there and I am quiet about it because low key I love it. \n\n He stops abruptly gets me up and pushes everything of the round table and pulls me on top of it then removes the carrot and he replaces it with himself. "You are mine and you'll follow all the orders I give." He growls in my ear and I moan as his tempo increases. I want to give up but that's when he stops. He looks into my eyes and any idea of letting go and letting myself cum is gone. His eyes are threatening me in that way I can't refuse.`,
                 featured: true,
-                image: "https://images.unsplash.com/photo-1511216335778-7cb8f49fa7a3?auto=format&fit=crop&q=80&w=800",
-                likes: 28,
-                comments: [
-                    { name: "Kendi", text: "The tension you create is unmatched. I held my breath through the entire piece.", date: "Feb 11, 2026" }
-                ]
+                image: "https://images.unsplash.com/photo-1511216335778-7cb8f49fa7a3?auto=format&fit=crop&q=80&w=800"
             },
             {
                 id: 'p_friends',
@@ -412,11 +451,7 @@ We are there representation!
 
 @Malel_`,
                 featured: true,
-                image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&q=80&w=800",
-                likes: 56,
-                comments: [
-                    { name: "Njeri", text: "This hit different. The truth in 'I am a wind' - felt that deep.", date: "Feb 11, 2026" }
-                ]
+                image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&q=80&w=800"
             },
             {
                 id: 'p0',
@@ -456,11 +491,7 @@ If he's not there to accept the emotions.
 
 @Malel_`,
                 featured: true,
-                image: "https://images.unsplash.com/photo-1499209974431-9dac3adaf471?auto=format&fit=crop&q=80&w=800",
-                likes: 89,
-                comments: [
-                    { name: "Maya", text: "The last stanza broke me. Writing into the void... we've all been there.", date: "Feb 10, 2026" }
-                ]
+                image: "https://images.unsplash.com/photo-1499209974431-9dac3adaf471?auto=format&fit=crop&q=80&w=800"
             },
             {
                 id: 'p_5k_reason',
@@ -515,11 +546,7 @@ The frog remained insulting me.
 
 @Malel`,
                 featured: true,
-                image: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&q=80&w=800",
-                likes: 67,
-                comments: [
-                    { name: "Zuri", text: "The metaphor of digging yourself deeper while thinking you're climbing... devastating and so real.", date: "Feb 10, 2026" }
-                ]
+                image: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&q=80&w=800"
             },
             {
                 id: 'p_move_on_honey',
@@ -560,11 +587,7 @@ Is it though?
 
 @Malel`,
                 featured: true,
-                image: "https://images.unsplash.com/photo-1587049352846-4a222e784587?auto=format&fit=crop&q=80&w=800",
-                likes: 73,
-                comments: [
-                    { name: "Imani", text: "The honey jar metaphor is perfect. We all know when we're lying to ourselves.", date: "Feb 9, 2026" }
-                ]
+                image: "https://images.unsplash.com/photo-1587049352846-4a222e784587?auto=format&fit=crop&q=80&w=800"
             },
             {
                 id: 'prose_hangout',
@@ -578,18 +601,229 @@ I could detangle myself and play pretend with my dolls at home but all fallen an
 
 Love. Your siblings will destroy you but build you up. They will always be the constant in your life and be there when the worst happened and in the campaign to put lucifer to his throne, in the war we fight for him, I found family in the fallen angels.`,
                 featured: true,
-                image: "https://images.unsplash.com/photo-1529310399831-ed472b81d589?auto=format&fit=crop&q=80&w=800",
-                likes: 51,
-                comments: [
-                    { name: "Thandiwe", text: "This dark exploration of toxic friendship... haunting. 'Family in the fallen angels' hit hard.", date: "Feb 8, 2026" }
-                ]
+                image: "https://images.unsplash.com/photo-1529310399831-ed472b81d589?auto=format&fit=crop&q=80&w=800"
             }
         ];
+
+        // ========================================
+        // FIREBASE FUNCTIONS
+        // ========================================
+
+        // Get likes count for a work
+        function loadLikes(workId) {
+            const likesRef = database.ref(`works/${workId}/likes`);
+            likesRef.on('value', (snapshot) => {
+                const count = snapshot.val() || 0;
+                if (currentWorkId === workId) {
+                    document.getElementById('like-count').innerText = count;
+                }
+                // Update in feed view
+                const work = allWorks.find(w => w.id === workId);
+                if (work) {
+                    work.likes = count;
+                    renderFeed(allWorks);
+                }
+            });
+        }
+
+        // Handle like button click
+        async function handleLike() {
+            if (!currentWorkId) return;
+            
+            const work = allWorks.find(w => w.id === currentWorkId);
+            const likesRef = database.ref(`works/${currentWorkId}/likes`);
+            
+            // Increment likes
+            const snapshot = await likesRef.once('value');
+            const currentLikes = snapshot.val() || 0;
+            await likesRef.set(currentLikes + 1);
+
+            // Send notification email to Malel
+            await sendNotification('like', {
+                workTitle: work.title,
+                workId: currentWorkId
+            });
+
+            // Visual feedback
+            const likeBtn = document.getElementById('like-btn-main');
+            likeBtn.classList.add('liked-btn');
+            setTimeout(() => likeBtn.classList.remove('liked-btn'), 300);
+        }
+
+        // Load comments for a work
+        function loadComments(workId) {
+            const commentsRef = database.ref(`works/${workId}/comments`);
+            commentsRef.on('value', (snapshot) => {
+                const comments = [];
+                snapshot.forEach((childSnapshot) => {
+                    comments.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
+                });
+                
+                // Sort by timestamp (newest first)
+                comments.sort((a, b) => b.timestamp - a.timestamp);
+                
+                if (currentWorkId === workId) {
+                    renderComments(comments);
+                }
+            });
+        }
+
+        // Submit new comment
+        async function submitComment() {
+            const nameInput = document.getElementById('comment-author');
+            const textInput = document.getElementById('comment-text');
+            
+            if (!nameInput.value || !textInput.value) return;
+
+            const work = allWorks.find(w => w.id === currentWorkId);
+            const commentsRef = database.ref(`works/${currentWorkId}/comments`);
+            
+            const newComment = {
+                name: nameInput.value,
+                text: textInput.value,
+                timestamp: Date.now(),
+                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                replies: {}
+            };
+
+            await commentsRef.push(newComment);
+
+            // Send notification email to Malel
+            await sendNotification('comment', {
+                workTitle: work.title,
+                workId: currentWorkId,
+                commenterName: newComment.name,
+                commentText: newComment.text
+            });
+
+            nameInput.value = '';
+            textInput.value = '';
+        }
+
+        // Reply to comment (Malel only)
+        async function submitReply(commentId) {
+            const replyInput = document.getElementById(`reply-input-${commentId}`);
+            if (!replyInput || !replyInput.value) return;
+
+            const replyRef = database.ref(`works/${currentWorkId}/comments/${commentId}/replies`);
+            
+            const newReply = {
+                name: 'Malel',
+                text: replyInput.value,
+                timestamp: Date.now(),
+                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                isAuthor: true
+            };
+
+            await replyRef.push(newReply);
+            replyInput.value = '';
+            
+            // Hide reply form
+            document.getElementById(`reply-form-${commentId}`).style.display = 'none';
+        }
+
+        // Show reply form
+        function showReplyForm(commentId) {
+            const form = document.getElementById(`reply-form-${commentId}`);
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+                document.getElementById(`reply-input-${commentId}`).focus();
+            } else {
+                form.style.display = 'none';
+            }
+        }
+
+        // Render comments
+        function renderComments(comments) {
+            const list = document.getElementById('comments-list');
+            if (comments.length === 0) {
+                list.innerHTML = '<p class="text-zinc-600 italic text-sm serif">No comments yet. Be the first to share your thoughts.</p>';
+            } else {
+                list.innerHTML = comments.map(c => {
+                    const replies = c.replies ? Object.entries(c.replies).map(([id, reply]) => reply) : [];
+                    
+                    return `
+                    <div class="bg-zinc-900/50 p-4 md:p-6 rounded-2xl border border-white/5 animate-fade">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-rose-500 font-bold text-xs uppercase tracking-widest">${c.name}</span>
+                            <span class="text-zinc-600 text-[10px]">${c.date}</span>
+                        </div>
+                        <p class="text-zinc-300 text-sm serif leading-relaxed mb-3">${c.text}</p>
+                        
+                        <!-- Reply button for Malel -->
+                        <button onclick="showReplyForm('${c.id}')" class="text-rose-500 text-xs font-bold hover:text-rose-400 transition-colors">
+                            Reply as Malel
+                        </button>
+
+                        <!-- Reply form -->
+                        <div id="reply-form-${c.id}" class="reply-form" style="display: none;">
+                            <textarea id="reply-input-${c.id}" rows="2" placeholder="Write your reply..." class="w-full bg-zinc-800 border border-white/5 rounded-xl px-3 py-2 text-sm focus:outline-none transition-colors mb-2"></textarea>
+                            <button onclick="submitReply('${c.id}')" class="bg-rose-600 text-white px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest hover:bg-rose-700 transition-all">Send Reply</button>
+                        </div>
+
+                        <!-- Replies -->
+                        ${replies.length > 0 ? `
+                            <div class="mt-4 space-y-3 pl-4 border-l-2 border-rose-600/20">
+                                ${replies.map(r => `
+                                    <div class="bg-zinc-800/50 p-3 rounded-xl">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-rose-500 font-bold text-xs uppercase tracking-widest">${r.name}</span>
+                                                ${r.isAuthor ? '<span class="author-badge">Author</span>' : ''}
+                                            </div>
+                                            <span class="text-zinc-600 text-[10px]">${r.date}</span>
+                                        </div>
+                                        <p class="text-zinc-300 text-sm serif leading-relaxed">${r.text}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `}).join('');
+            }
+        }
+
+        // Send notification via FormSubmit
+        async function sendNotification(type, data) {
+            const formData = new FormData();
+            
+            if (type === 'like') {
+                formData.append('_subject', `❤️ New Like on "${data.workTitle}"`);
+                formData.append('message', `Someone just liked your work "${data.workTitle}"!\n\nView it here: ${window.location.origin}#${data.workId}`);
+            } else if (type === 'comment') {
+                formData.append('_subject', `💬 New Comment on "${data.workTitle}"`);
+                formData.append('message', `${data.commenterName} commented on "${data.workTitle}":\n\n"${data.commentText}"\n\nView and reply here: ${window.location.origin}#${data.workId}`);
+            }
+            
+            formData.append('_captcha', 'false');
+            formData.append('_template', 'table');
+
+            try {
+                await fetch(`https://formsubmit.co/${MALEL_EMAIL}`, {
+                    method: 'POST',
+                    body: formData
+                });
+            } catch (error) {
+                console.error('Notification error:', error);
+            }
+        }
+
+        // ========================================
+        // UI FUNCTIONS
+        // ========================================
 
         function init() {
             renderFeatured();
             renderFeed(allWorks);
             document.getElementById('post-count').innerText = `${allWorks.length} items`;
+            
+            // Load initial data for all works
+            allWorks.forEach(work => {
+                loadLikes(work.id);
+            });
         }
 
         function renderFeatured() {
@@ -620,7 +854,7 @@ Love. Your siblings will destroy you but build you up. They will always be the c
                                 <span class="text-rose-500">${work.category}</span>
                                 <span class="ml-auto text-rose-500/60 flex items-center gap-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18L12 21z"/></svg>
-                                    ${work.likes}
+                                    ${work.likes || 0}
                                 </span>
                             </div>
                             <h3 class="text-xl md:text-2xl font-bold mb-2 md:mb-3 group-hover:text-rose-500 transition-colors serif">${work.title}</h3>
@@ -654,73 +888,13 @@ Love. Your siblings will destroy you but build you up. They will always be the c
                 <div class="post-content serif text-gray-200 text-base md:text-lg">${work.content}</div>
             `;
 
-            renderInteraction(work);
+            // Load likes and comments
+            loadLikes(id);
+            loadComments(id);
 
             document.getElementById('reader-overlay').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
             document.getElementById('reader-overlay').scrollTop = 0;
-        }
-
-        function renderInteraction(work) {
-            document.getElementById('like-count').innerText = work.likes;
-            const likeBtn = document.getElementById('like-btn-main');
-            if (work.isLiked) {
-                likeBtn.classList.add('liked-btn');
-            } else {
-                likeBtn.classList.remove('liked-btn');
-            }
-
-            const list = document.getElementById('comments-list');
-            if (work.comments.length === 0) {
-                list.innerHTML = '<p class="text-zinc-600 italic text-sm serif">No comments yet. Be the first to share your thoughts.</p>';
-            } else {
-                list.innerHTML = work.comments.map(c => `
-                    <div class="bg-zinc-900/50 p-6 rounded-2xl border border-white/5 animate-fade">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-rose-500 font-bold text-xs uppercase tracking-widest">${c.name}</span>
-                            <span class="text-zinc-600 text-[10px]">${c.date}</span>
-                        </div>
-                        <p class="text-zinc-300 text-sm serif leading-relaxed">${c.text}</p>
-                    </div>
-                `).join('');
-            }
-        }
-
-        function handleLike() {
-            const work = allWorks.find(w => w.id.toString() === currentWorkId.toString());
-            if (!work) return;
-
-            if (work.isLiked) {
-                work.likes--;
-                work.isLiked = false;
-            } else {
-                work.likes++;
-                work.isLiked = true;
-            }
-
-            renderInteraction(work);
-            renderFeed(allWorks); // Update counts on main feed
-        }
-
-        function submitComment() {
-            const nameInput = document.getElementById('comment-author');
-            const textInput = document.getElementById('comment-text');
-            
-            if (!nameInput.value || !textInput.value) return;
-
-            const work = allWorks.find(w => w.id.toString() === currentWorkId.toString());
-            if (!work) return;
-
-            const newComment = {
-                name: nameInput.value,
-                text: textInput.value,
-                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-            };
-
-            work.comments.unshift(newComment);
-            nameInput.value = '';
-            textInput.value = '';
-            renderInteraction(work);
         }
 
         function closeReader() {
