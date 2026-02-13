@@ -30,20 +30,7 @@
         ::-webkit-scrollbar-track { background: #1a1a1a; }
         ::-webkit-scrollbar-thumb { background: var(--brand-red); border-radius: 10px; }
 
-        /* Sticky Section Scroll Snap */
-        .snap-container {
-            height: 100vh;
-            overflow-y: scroll;
-            scroll-snap-type: y mandatory;
-            scroll-behavior: smooth;
-        }
-        .snap-section {
-            scroll-snap-align: start;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+        /* Removed snap scroll - smooth scroll only */
 
         /* Horizontal Scroll for Featured */
         .horizontal-scroll-container {
@@ -88,21 +75,20 @@
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
             z-index: 100;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 10vh;
         }
-        .search-modal.active { display: block; }
+        .search-modal.active { display: flex; }
         
         .search-container {
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
             width: 90%;
             max-width: 600px;
         }
         
         @media (min-width: 768px) {
-            .search-container {
-                top: 15%;
+            .search-modal {
+                padding-top: 15vh;
             }
         }
 
@@ -141,13 +127,53 @@
             padding-left: 20px;
             border-left: 2px solid rgba(225, 29, 72, 0.3);
         }
+
+        /* Password Modal */
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 200;
+        }
+        .password-modal.active { display: flex; align-items: center; justify-content: center; }
+
+        /* Subscription Success Modal */
+        .subscription-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 150;
+        }
+        .subscription-modal.active { display: flex; align-items: center; justify-content: center; }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-popup { animation: fadeInScale 0.3s ease forwards; }
+
+        /* Hero Section */
+        .hero-bg {
+            background: linear-gradient(180deg, rgba(15, 15, 15, 0.4) 0%, rgba(15, 15, 15, 0.95) 100%), 
+                        url('https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&q=80&w=1920') center/cover;
+        }
     </style>
 </head>
 <body class="pb-24">
 
     <!-- Header -->
     <header class="p-4 md:p-6 flex justify-between items-center fixed top-0 w-full bg-gradient-to-b from-[#0F0F0F] to-transparent z-40">
-        <h1 class="text-2xl md:text-3xl font-black tracking-tighter text-rose-600 cursor-pointer" onclick="document.querySelector('.snap-container').scrollTo({top: 0, behavior: 'smooth'})">MALEL</h1>
+        <h1 class="text-2xl md:text-3xl font-black tracking-tighter text-rose-600 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">MALEL</h1>
         <div class="flex items-center gap-3">
             <button id="malel-logout-btn" onclick="malelLogout()" class="hidden px-4 py-2 glass-nav rounded-full text-xs font-bold text-rose-500 hover:bg-rose-600/10 transition-colors">
                 Logout
@@ -155,11 +181,30 @@
         </div>
     </header>
 
-    <!-- Main Content with Snap Scroll -->
-    <div class="snap-container">
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center justify-center px-4 md:px-6 pt-20">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-black mb-6 md:mb-8 serif leading-tight">
+                Chronicles of a <span class="text-rose-600">Restless Mind</span>
+            </h1>
+            <p class="text-lg md:text-xl lg:text-2xl text-gray-300 mb-4 md:mb-6 leading-relaxed max-w-3xl mx-auto">
+                A sanctuary for poetry, dark fiction, and the unspoken thoughts of a modern observer.
+            </p>
+            <p class="text-sm md:text-base text-gray-400 italic mb-8 md:mb-12">
+                Words etched in shadows, meant to be read in the light.
+            </p>
+            <button onclick="document.getElementById('featured-section').scrollIntoView({behavior: 'smooth'})" 
+                    class="px-8 py-3 md:px-10 md:py-4 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-full transition-all transform hover:scale-105 text-sm md:text-base">
+                Explore Works
+            </button>
+        </div>
+    </section>
+
+    <!-- Main Content - Removed snap-container -->
+    <div>
         
         <!-- SECTION 1: Featured -->
-        <section class="snap-section px-4 md:px-6 pt-20 md:pt-24 max-w-6xl mx-auto">
+        <section id="featured-section" class="px-4 md:px-6 pt-16 md:pt-24 pb-8 md:pb-12 max-w-6xl mx-auto">
             <h2 class="text-xs uppercase tracking-widest text-rose-500 font-bold mb-4">Latest Releases &bull; 2026</h2>
             <div class="horizontal-scroll-container" id="featured-list">
                 <!-- Dynamically filled -->
@@ -167,7 +212,7 @@
         </section>
 
         <!-- SECTION 2: Feed -->
-        <section id="archive-section" class="snap-section px-4 md:px-6 py-16 md:py-24">
+        <section id="archive-section" class="px-4 md:px-6 py-16 md:py-24">
             <div class="max-w-4xl mx-auto w-full">
                 <div class="flex items-baseline justify-between mb-8 border-b border-rose-600/30 pb-2">
                     <h2 class="text-xl md:text-2xl font-bold uppercase tracking-tighter">The Full Archive</h2>
@@ -180,17 +225,17 @@
         </section>
 
         <!-- SECTION 3: Waiting List / Footer -->
-        <footer class="snap-section px-4 md:px-6 py-16 md:py-24 bg-zinc-950 border-t border-rose-600/20">
+        <footer class="px-4 md:px-6 py-16 md:py-24 bg-zinc-950 border-t border-rose-600/20">
             <div class="max-w-2xl mx-auto text-center">
                 <h2 class="text-3xl md:text-4xl font-black mb-4 tracking-tighter serif">Join Malel's Inner Circle</h2>
                 <p class="text-sm md:text-base text-gray-400 mb-8 md:mb-12">Subscribers receive exclusive access to limited works and email notifications whenever a new piece is added.</p>
                 
-                <form action="https://formsubmit.co/ivycheruto30@gmail.com" method="POST" class="space-y-4">
+                <form id="subscribe-form" onsubmit="handleSubscribe(event)" class="space-y-4">
                     <input type="hidden" name="_subject" value="New Malel Inner Circle Subscriber!">
                     <input type="hidden" name="_captcha" value="false">
                     
                     <div class="flex flex-col md:flex-row gap-4">
-                        <input type="email" name="email" required placeholder="your.email@example.com" 
+                        <input type="email" id="subscribe-email" name="email" required placeholder="your.email@example.com" 
                             class="flex-1 bg-zinc-900 border border-white/10 px-4 md:px-6 py-3 md:py-4 rounded-full text-sm md:text-base text-white focus:outline-none transition-all focus:border-rose-600">
                         <button type="submit" class="bg-rose-600 hover:bg-rose-700 px-8 md:px-10 py-3 md:py-4 rounded-full font-black text-xs md:text-sm uppercase tracking-widest transition-all">
                             Subscribe
@@ -200,6 +245,10 @@
                 
                 <div class="mt-16 md:mt-24 pt-8 md:pt-12 border-t border-white/5 text-gray-600 text-xs tracking-widest uppercase">
                     &copy; 2026 Malel Creative. All rights reserved.
+                </div>
+                
+                <div class="mt-4 text-[9px] md:text-xs text-gray-700">
+                    Designed by <a href="https://exevodesigners.online" target="_blank" class="text-rose-600 hover:text-rose-500 transition-colors">Exevo Designers Network</a>
                 </div>
             </div>
         </footer>
@@ -223,6 +272,13 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon group-active:scale-125 transition-transform md:w-6 md:h-6"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.505 4.04 3 5.5L12 21l7-7z"/></svg>
                         <span id="like-count" class="text-sm md:text-base">0</span>
                     </button>
+                    <div class="flex items-center gap-2 text-zinc-400 font-bold">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="md:w-6 md:h-6">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        <span id="views-count" class="text-sm md:text-base">0</span>
+                    </div>
                     <div class="text-zinc-500 text-xs md:text-sm italic serif">Tell the author what you think.</div>
                 </div>
 
@@ -252,7 +308,7 @@
                 <input type="text" id="search-input" placeholder="Search works by title or content..." 
                     class="bg-transparent w-full text-white text-sm md:text-base focus:outline-none placeholder:text-zinc-600"
                     oninput="handleSearch(this.value)">
-                <button onclick="toggleSearch()" class="ml-3 text-zinc-500 hover:text-white transition-colors flex-shrink-0">
+                <button onclick="event.stopPropagation(); toggleSearch()" class="ml-3 text-zinc-500 hover:text-white transition-colors flex-shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
                 </button>
             </div>
@@ -337,7 +393,7 @@
                 <p class="text-gray-400 mb-4 md:mb-6 serif text-sm md:text-base">
                     Join the inner circle to receive new works, exclusive content, and updates directly to your inbox.
                 </p>
-                <a href="#subscribe" onclick="closeAbout(); document.querySelector('.snap-container').scrollTo({top: document.querySelector('.snap-container').scrollHeight, behavior: 'smooth'})" 
+                <a href="#subscribe" onclick="closeAbout(); window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})" 
                    class="inline-block bg-rose-600 hover:bg-rose-700 px-6 md:px-8 py-2 md:py-3 rounded-full font-black text-xs md:text-sm uppercase tracking-widest transition-all">
                     Subscribe to Updates
                 </a>
@@ -345,9 +401,51 @@
         </div>
     </div>
 
+    <!-- Password Modal for Malel Reply -->
+    <div id="password-modal" class="password-modal">
+        <div class="bg-zinc-900 border-2 border-rose-600 rounded-2xl p-6 md:p-8 max-w-md w-11/12 md:w-full animate-popup shadow-2xl">
+            <h3 class="text-xl md:text-2xl font-bold mb-4 text-center text-rose-500">Malel Authentication</h3>
+            <p class="text-gray-400 text-sm mb-6 text-center">Enter password to reply as Malel</p>
+            <div class="relative mb-6">
+                <input type="password" id="password-input" 
+                       class="w-full px-4 py-3 bg-black border border-rose-600/30 rounded-lg text-white placeholder-gray-600 outline-none focus:border-rose-600 pr-12"
+                       placeholder="Enter password">
+                <button onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-rose-500 transition-colors">
+                    <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="text-red-500 text-sm mb-4 text-center hidden" id="password-error">Incorrect password</div>
+            <div class="flex gap-3">
+                <button onclick="closePasswordModal()" class="flex-1 px-4 py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg font-bold transition-colors">
+                    Cancel
+                </button>
+                <button onclick="verifyPassword()" class="flex-1 px-4 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-bold transition-colors">
+                    Verify
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subscription Success Modal -->
+    <div id="subscription-modal" class="subscription-modal">
+        <div class="bg-zinc-900 border-2 border-rose-600 rounded-2xl p-6 md:p-8 max-w-md w-11/12 md:w-full animate-popup shadow-2xl text-center">
+            <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-rose-600 mx-auto mb-4 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" stroke="white" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+            </div>
+            <h3 class="text-xl md:text-2xl font-bold mb-3 text-rose-500">Welcome to the Archive!</h3>
+            <p class="text-gray-300 mb-2 text-sm md:text-base">You've successfully subscribed to Malel's works.</p>
+            <p class="text-gray-500 text-xs md:text-sm mb-6">Redirecting to homepage in <span id="countdown">5</span> seconds...</p>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="glass-nav fixed bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-40 px-6 md:px-10 py-3 md:py-4 rounded-full flex justify-center items-center gap-8 md:gap-16 border border-rose-600/10 shadow-2xl">
-        <button onclick="document.querySelector('.snap-container').scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center gap-1 text-rose-500 hover:scale-110 transition-transform">
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center gap-1 text-rose-500 hover:scale-110 transition-transform">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
             <span class="text-[9px] md:text-[10px] font-black uppercase tracking-tighter">Home</span>
         </button>
@@ -388,7 +486,7 @@
         const MALEL_EMAIL = 'ivycheruto30@gmail.com';
         
         // Password protection for Malel
-        const MALEL_PASSWORD = 'Malel2026!'; // Change this to your own secure password
+        const MALEL_PASSWORD = 'Henrypaul26'; // Updated password
         let isMalelAuthenticated = false;
 
         // Check if Malel is already authenticated (stored in session)
@@ -742,22 +840,19 @@ Love. Your siblings will destroy you but build you up. They will always be the c
         }
 
         // Show reply form (with password protection)
+        let currentReplyingTo = null;
+
         function showReplyForm(commentId) {
             // Check if Malel is authenticated
             if (!isMalelAuthenticated) {
-                const password = prompt('Enter Malel\'s password to reply:');
-                
-                if (password === MALEL_PASSWORD) {
-                    isMalelAuthenticated = true;
-                    sessionStorage.setItem('malel_auth', 'true');
-                } else if (password !== null) {
-                    alert('Incorrect password. Only Malel can reply to comments.');
-                    return;
-                } else {
-                    return; // User cancelled
-                }
+                showPasswordModal(commentId);
+                return;
             }
             
+            showReplyBox(commentId);
+        }
+
+        function showReplyBox(commentId) {
             const form = document.getElementById(`reply-form-${commentId}`);
             if (form.style.display === 'none') {
                 form.style.display = 'block';
@@ -771,8 +866,8 @@ Love. Your siblings will destroy you but build you up. They will always be the c
         function malelLogout() {
             isMalelAuthenticated = false;
             sessionStorage.removeItem('malel_auth');
+            document.getElementById('malel-logout-btn').classList.add('hidden');
             alert('Logged out successfully');
-            location.reload();
         }
 
         // Render comments
@@ -935,6 +1030,10 @@ Love. Your siblings will destroy you but build you up. They will always be the c
             // Load likes and comments
             loadLikes(id);
             loadComments(id);
+            
+            // Track views
+            incrementViews(id);
+            loadViews(id);
 
             document.getElementById('reader-overlay').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
@@ -959,12 +1058,18 @@ Love. Your siblings will destroy you but build you up. They will always be the c
 
         function toggleSearch() {
             const modal = document.getElementById('search-modal');
-            const isActive = modal.classList.toggle('active');
-            if(isActive) {
+            const isActive = modal.classList.contains('active');
+            
+            if (isActive) {
+                modal.classList.remove('active');
                 document.getElementById('search-input').value = '';
                 document.getElementById('search-results').innerHTML = '';
                 document.getElementById('search-results').classList.add('hidden');
-                document.getElementById('search-input').focus();
+            } else {
+                modal.classList.add('active');
+                setTimeout(() => {
+                    document.getElementById('search-input').focus();
+                }, 100);
             }
         }
 
@@ -990,6 +1095,130 @@ Love. Your siblings will destroy you but build you up. They will always be the c
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" class="text-zinc-700 group-hover:text-rose-500 transition-colors flex-shrink-0"><path d="m9 18 6-6-6-6"/></svg>
                 </div>
             `).join('') || '<p class="text-center text-zinc-600 py-8 text-sm italic">No works found matching your search.</p>';
+        }
+
+        // ========================================
+        // PASSWORD MODAL FUNCTIONS
+        // ========================================
+        
+        function togglePasswordVisibility() {
+            const input = document.getElementById('password-input');
+            const icon = document.getElementById('eye-icon');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><line x1="1" y1="1" x2="23" y2="23"/>`;
+            } else {
+                input.type = 'password';
+                icon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+            }
+        }
+
+        function showPasswordModal(replyToCommentId) {
+            currentReplyingTo = replyToCommentId;
+            document.getElementById('password-modal').classList.add('active');
+            document.getElementById('password-input').value = '';
+            document.getElementById('password-error').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('password-input').focus();
+            }, 100);
+        }
+
+        function closePasswordModal() {
+            document.getElementById('password-modal').classList.remove('active');
+            currentReplyingTo = null;
+        }
+
+        function verifyPassword() {
+            const password = document.getElementById('password-input').value;
+            const errorDiv = document.getElementById('password-error');
+            
+            if (password === MALEL_PASSWORD) {
+                isMalelAuthenticated = true;
+                sessionStorage.setItem('malel_auth', 'true');
+                document.getElementById('malel-logout-btn').classList.remove('hidden');
+                closePasswordModal();
+                
+                if (currentReplyingTo) {
+                    showReplyBox(currentReplyingTo);
+                }
+            } else {
+                errorDiv.classList.remove('hidden');
+                document.getElementById('password-input').value = '';
+            }
+        }
+
+        // Allow Enter key to verify password
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('password-input');
+            if (passwordInput) {
+                passwordInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        verifyPassword();
+                    }
+                });
+            }
+        });
+
+        // ========================================
+        // SUBSCRIPTION FUNCTIONS
+        // ========================================
+        
+        function handleSubscribe(e) {
+            e.preventDefault();
+            const email = document.getElementById('subscribe-email').value;
+            
+            // Save to Firebase
+            database.ref('subscribers').push({
+                email: email,
+                timestamp: Date.now()
+            });
+
+            // Show success modal
+            showSubscriptionSuccess();
+            
+            // Reset form
+            document.getElementById('subscribe-email').value = '';
+        }
+
+        function showSubscriptionSuccess() {
+            const modal = document.getElementById('subscription-modal');
+            modal.classList.add('active');
+            
+            let countdown = 5;
+            const countdownElement = document.getElementById('countdown');
+            
+            const timer = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    modal.classList.remove('active');
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                }
+            }, 1000);
+        }
+
+        // ========================================
+        // VIEWS TRACKING
+        // ========================================
+        
+        function incrementViews(workId) {
+            const viewsRef = database.ref(`works/${workId}/views`);
+            viewsRef.transaction(currentViews => {
+                return (currentViews || 0) + 1;
+            });
+        }
+
+        function loadViews(workId) {
+            database.ref(`works/${workId}/views`).on('value', snapshot => {
+                const views = snapshot.val() || 0;
+                const viewsElement = document.getElementById('views-count');
+                if (viewsElement) {
+                    viewsElement.textContent = views;
+                }
+            });
         }
 
         window.onload = init;
