@@ -90,7 +90,7 @@
                     </div>
                 </form>
                 <div class="mt-16 md:mt-24 pt-8 md:pt-12 border-t border-white/5 text-gray-600 text-xs tracking-widest uppercase">&copy; 2026 Malel Creative. All rights reserved.</div>
-                <div class="mt-4 text-[9px] md:text-xs text-gray-700">Designed by <a href="https://www.exevodesigners.online" target="_blank" class="text-rose-600 hover:text-rose-500 transition-colors">Exevo Designers Network</a></div>
+                <div class="mt-4 text-[9px] md:text-xs text-gray-700">Designed by <a href="https://exevodesigners.online" target="_blank" class="text-rose-600 hover:text-rose-500 transition-colors">Exevo Designers Network</a></div>
             </div>
         </footer>
     </div>
@@ -235,8 +235,20 @@
             appId: "1:391798544085:web:b147dcde4260e7572e745c",
             measurementId: "G-RVNJF2LQLC"
         };
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        // Firebase loads from an external CDN (gstatic.com). On some mobile networks,
+        // browsers, or ad/privacy blockers that script can fail to load or be blocked.
+        // If that happens, "firebase" is undefined and calling it would throw an error
+        // that used to stop this entire script from running — silently hiding the
+        // whole works list (likes/comments/views are optional; the list itself isn't).
+        // Wrapping init in try/catch means the page still renders all works normally,
+        // just without the live like/comment counts if Firebase couldn't connect.
+        let database = null;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            database = firebase.database();
+        } catch (e) {
+            console.error('Firebase failed to initialize — works will still display, but likes/comments/views will be unavailable.', e);
+        }
 
         let currentWorkId = null;
         const MALEL_EMAIL = 'ivycheruto30@gmail.com';
@@ -290,7 +302,7 @@ It consumes till there's nothing.
                 date: "Feb 11, 2026",
                 category: "OWN YOUR DARKNESS 😉",
                 excerpt: "Some fat guy in my job died because he had a heart attack...",
-                content: `Some fat guy in my job died because he had a heart attack that was coming for him considering he was almost a hundred and fifty kilograms. Looked like a water tank. I am sure his legs couldn't carry him for more than a three minute walk. The people at my work said we should go to his funeral and everyone should bring a plus one. I was considering to bring one of my lady friends as a date but he heard about it. \n\n That was the end of that, he bought me a black bodycon, a big hat with a veil in it and beautiful black boots. He himself was dressed in all black suit and we looked like the angel of death. When we arrived at his home, his car tinted we sat in it for almost six minutes. He was claiming my mouth in that possessive obsessive way he does before we go out into the world. He also always makes sure to leave a bruise so that I can remember who owns me. Classic 19th century psycho and you ask why I am attracted to him. \n\n He raises my dress to my waist, so much for ironing it and lands his mouth in my inner thighs. He bites so hard that blood comes out. He licks the blood then arranges me and we get off. I don't understand the bite though. The funeral family has decided that they will leave the body inside the house for viewing then when it's time to burry it's when they will bring it out. We are the last ones to go to view his body and this is where I know he has no boundaries. I can see his boner and I know he's planning something shitty. \n\n The something shitty was bending me over the casket, both the entrance and exit door open and anyone could walk in, and sliding inside my wet pussy with ease because of the earlier make out session. He is slow and I have never been terrified in my life like that. His hands rub my inner thighs slowly and I swear time stops as he does that. My body responds to the terror and I become so slippery that I no longer feel him all I feel is as if something hard is sliding in me but more like with soap. \n\n My cheeks are pressed firmly on the glass covering the idiots face and I think I see him cry for a second because he is thrusting now in a ferocious way. My heart is pounding on my throat when one of his hands skate down to my clit to rub my it with his thumb in a circulation motion. The other hand goes to my hair and I am pulled back that I feel him hit my g spot so painfully and hard. I melt and he feels it as he increases his speed. \n\n I have been trying not to moan but the pressure on my throat and heart needs to be released and I try my best but we hear footsteps. I cry for him to let us go but he increases speed spills in me then I also cum before he draws my dress down and hugs me hiding his naked dick. I help him close up as I pretend to cry and him hugging him as the mother of the guy enters.`,
+                content: `Some fat guy in my job died because he had a heart attack that was coming for him considering he was almost a hundred and fifty kilograms. Looked like a water tank. I am sure his legs couldn't carry him for more than a three minute walk. The people at my work said we should go to his funeral and everyone should bring a plus one. I was considering to bring one of my lady friends as a date but he heard about it. \n\n That was the end of that, he bought me a black bodycon, a big hat with a veil in it and beautiful black boots. He himself was dressed in all black suit and we looked like the angel of death. When we arrived at his home, his car tinted we sat in it for almost six minutes. He was claiming my mouth in that possessive obsessive way he does before we go out into the world. He also always makes sure to leave a bruise so that I can remember who owns me. Classic 19th century psycho and you ask why I am attracted to him. \n\n He raises my dress to my waist, so much for ironing it and lands his mouth in my inner thighs. He bites so hard that blood comes out. He licks the blood then arranges me and we get off. I don't understand the bite though. The funeral family has decided that they will leave the body inside the house for viewing then when it's time to burry it's when they will bring it out. We are the last ones to go to view his body and this is where I know he has no boundaries. I can see his boner and I know he's planning something shitty. \n\n The something shitty was bending me over the casket, both the entrance and exit door open and anyone could walk in, and sliding inside my wet pussy with ease because of the earlier make out session. He is slow and I have never been terrified in my life like that. His hands rub my inner thighs slowly and I swear time stops as he does that. My body responds to the terror and I become so slippery that I no longer feel him all I feel is as if something hard is sliding in me but more like with soap. \n\n My cheeks are pressed firmly on the glass covering the idiots face and I think I see him cry for a second because he is thrusting now in a ferocious way. My heart is pounding on my throat when one of his hands skate down to my clit to rub it with his thumb in a circulation motion. The other hand goes to my hair and I am pulled back that I feel him hit my g spot so painfully and hard. I melt and he feels it as he increases his speed. \n\n I have been trying not to moan but the pressure on my throat and heart needs to be released and I try my best but we hear footsteps. I cry for him to let us go but he increases speed spills in me then I also cum before he draws my dress down and hugs me hiding his naked dick. I help him close up as I pretend to cry and him hugging me as the mother of the guy enters.`,
                 featured: true,
                 image: "https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?auto=format&fit=crop&q=80&w=800"
             },
@@ -505,10 +517,102 @@ I could detangle myself and play pretend with my dolls at home but all fallen an
 Love. Your siblings will destroy you but build you up. They will always be the constant in your life and be there when the worst happened and in the campaign to put lucifer to his throne, in the war we fight for him, I found family in the fallen angels.`,
                 featured: true,
                 image: "https://images.unsplash.com/photo-1529310399831-ed472b81d589?auto=format&fit=crop&q=80&w=800"
+            },
+            {
+                id: 'p_jericho_walls',
+                title: "JERICHO WALLS",
+                date: "May 14, 2026",
+                category: "Poetry",
+                excerpt: "A while ago, I was a poet. I was a writer. I created through words...",
+                content: `A while ago,
+I was a poet.
+I was a writer.
+I created through words.
+
+My mind would settle every time
+I picked a pen.
+Then, I created without a pen.
+I created
+The most beautiful of what nature could give.
+
+It was a little corn flower.
+I looked at it before I could even see it.
+I felt it before it could even feel.
+It was so beautiful I cried.
+
+Then a mower;
+The little corn flower was chopped down.
+My body experienced the physical pain.
+My heart bled for it.
+
+Now, I pass through days.
+Even when I created another corn flower
+It was not the same.
+The pain had numbed me.
+
+I became psychotic.
+The pen lost its meaning.
+The creations before that, lost their meaning.
+It all means nothing now.
+
+@Malel`,
+                featured: true,
+                image: "https://images.unsplash.com/photo-1746439104337-72476c70a58c?auto=format&fit=crop&q=80&w=800"
+            },
+            {
+                id: 'p_checkmate',
+                title: "CHECKMATE",
+                date: "Jun 2, 2026",
+                category: "Poetry",
+                excerpt: "Learned to play chess, the king is a crucial but useless piece...",
+                content: `Learned to play chess,
+The king is a crucial but useless piece.
+The pawn is weak, never moves back,
+However, it upgrades to be the most powerful piece.
+
+I wish I could be a queen,
+The most powerful piece.
+I wish I could be the rook,
+Which I believe is second powerful.
+Or the bishop,
+Or knight.
+
+However,
+I am broken.
+Unrepaired.
+I am just but a pawn.
+
+I keep moving forward,
+Trying my best to be a queen.
+Crying for that spot.
+Maybe be a knight.
+
+It has become harder.
+The transgressions I make.
+A pawn cannot move backwards.
+Yet I sell myself to my enemies.
+
+Falling for the lust you give.
+Selling my bishop for a taste.
+Sacrificing my knight for a risky policy.
+
+Yet all you had to do,
+To checkmate me
+Was refuse me.
+
+@Malel`,
+                featured: true,
+                image: "https://images.unsplash.com/photo-1560174068-db2f21bed320?auto=format&fit=crop&q=80&w=800"
             }
         ];
 
+        // Always show the newest work first — sort by date rather than relying on
+        // the order works were added to the array above, so any future addition
+        // automatically lands in the right place no matter where it's inserted.
+        allWorks.sort((a, b) => new Date(b.date) - new Date(a.date));
+
         function loadLikes(workId) {
+            if (!database) return;
             database.ref(`works/${workId}/likes`).on('value', (snapshot) => {
                 const count = snapshot.val() || 0;
                 if (currentWorkId === workId) { document.getElementById('like-count').innerText = count; }
@@ -519,6 +623,7 @@ Love. Your siblings will destroy you but build you up. They will always be the c
 
         async function handleLike() {
             if (!currentWorkId) return;
+            if (!database) { alert('Likes are temporarily unavailable. Please try again later.'); return; }
             const work = allWorks.find(w => w.id === currentWorkId);
             const likesRef = database.ref(`works/${currentWorkId}/likes`);
             const snapshot = await likesRef.once('value');
@@ -530,6 +635,7 @@ Love. Your siblings will destroy you but build you up. They will always be the c
         }
 
         function loadComments(workId) {
+            if (!database) { renderComments([]); return; }
             database.ref(`works/${workId}/comments`).on('value', (snapshot) => {
                 const comments = [];
                 snapshot.forEach(c => comments.push({ id: c.key, ...c.val() }));
@@ -542,6 +648,7 @@ Love. Your siblings will destroy you but build you up. They will always be the c
             const nameInput = document.getElementById('comment-author');
             const textInput = document.getElementById('comment-text');
             if (!nameInput.value || !textInput.value) return;
+            if (!database) { alert('Comments are temporarily unavailable. Please try again later.'); return; }
             const work = allWorks.find(w => w.id === currentWorkId);
             const newComment = {
                 name: nameInput.value, text: textInput.value,
@@ -557,6 +664,7 @@ Love. Your siblings will destroy you but build you up. They will always be the c
         async function submitReply(commentId) {
             const replyInput = document.getElementById(`reply-input-${commentId}`);
             if (!replyInput || !replyInput.value) return;
+            if (!database) { alert('Replies are temporarily unavailable. Please try again later.'); return; }
             await database.ref(`works/${currentWorkId}/comments/${commentId}/replies`).push({
                 name: 'Malel', text: replyInput.value, timestamp: Date.now(),
                 date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
@@ -766,6 +874,7 @@ Love. Your siblings will destroy you but build you up. They will always be the c
 
         function handleSubscribe(e) {
             e.preventDefault();
+            if (!database) { alert('Subscriptions are temporarily unavailable. Please try again later.'); return; }
             database.ref('subscribers').push({ email: document.getElementById('subscribe-email').value, timestamp: Date.now() });
             showSubscriptionSuccess();
             document.getElementById('subscribe-email').value = '';
@@ -782,15 +891,16 @@ Love. Your siblings will destroy you but build you up. They will always be the c
             }, 1000);
         }
 
-        function incrementViews(workId) { database.ref(`works/${workId}/views`).transaction(v => (v || 0) + 1); }
+        function incrementViews(workId) { if (database) database.ref(`works/${workId}/views`).transaction(v => (v || 0) + 1); }
         function loadViews(workId) {
+            if (!database) return;
             database.ref(`works/${workId}/views`).on('value', s => {
                 const el = document.getElementById('views-count');
                 if (el) el.textContent = s.val() || 0;
             });
         }
 
-        window.onload = init;
+        init();
     </script>
 </body>
 </html>
