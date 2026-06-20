@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malel | Books</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="logos/malel-logo.jpeg" />
+    <style>
+        :root { --brand-red: #E11D48; --brand-black: #0F0F0F; }
+        body { background-color: var(--brand-black); color: #F5F5F5; font-family: 'Inter', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
+        .serif { font-family: 'Crimson Pro', serif; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1a1a1a; }
+        ::-webkit-scrollbar-thumb { background: var(--brand-red); border-radius: 10px; }
+        .glass-nav { background: rgba(15, 15, 15, 0.9); backdrop-filter: blur(15px); border: 1px solid rgba(225, 29, 72, 0.15); }
+        .chapter-reader { display: none; position: fixed; inset: 0; background: #0F0F0F; z-index: 50; overflow-y: auto; scroll-behavior: smooth; }
+        .chapter-reader.active { display: block; }
+        .post-content { line-height: 2; font-size: 1.125rem; white-space: pre-line; }
+        .book-card { background: linear-gradient(135deg, #1a1a1a 0%, #111 100%); border: 1px solid rgba(225,29,72,0.12); transition: border-color 0.3s, transform 0.3s; }
+        .book-card:hover { border-color: rgba(225,29,72,0.4); transform: translateY(-4px); }
+        .chapter-item { border-left: 2px solid rgba(225,29,72,0.15); transition: border-color 0.2s, background 0.2s; }
+        .chapter-item:hover { border-color: var(--brand-red); background: rgba(225,29,72,0.04); }
+        .lock-badge { background: rgba(225,29,72,0.1); border: 1px solid rgba(225,29,72,0.2); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade { animation: fadeIn 0.4s ease forwards; }
+        .progress-bar { height: 3px; background: linear-gradient(90deg, var(--brand-red), #be123c); transition: width 0.3s; }
+        .subscribe-strip { background: linear-gradient(135deg, rgba(225,29,72,0.08) 0%, rgba(190,18,60,0.04) 100%); border: 1px solid rgba(225,29,72,0.15); }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- Header -->
+    <header class="p-4 md:p-6 flex justify-between items-center fixed top-0 w-full glass-nav z-40">
+        <a href="index.html" class="flex items-center gap-3 text-zinc-400 hover:text-rose-500 transition-colors font-bold text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+            BACK TO MALEL
+        </a>
+        <h1 class="text-xl md:text-2xl font-black tracking-tighter text-rose-600">THE LIBRARY</h1>
+        <div class="w-24"></div>
+    </header>
+
+    <!-- Hero -->
+    <section class="pt-32 pb-16 px-4 md:px-6 text-center max-w-3xl mx-auto">
+        <p class="text-rose-500 text-xs font-bold uppercase tracking-widest mb-4">Malel's Books</p>
+        <h1 class="text-4xl md:text-6xl font-black serif leading-tight mb-6">Every chapter<br><span class="text-rose-600 italic">leaves a mark.</span></h1>
+        <p class="text-gray-400 text-base md:text-lg serif leading-relaxed">These are not books you finish. They are books that stay with you. New chapters are released as they are written — come back often, and bring someone who needs to read this.</p>
+    </section>
+
+    <!-- Books Grid -->
+    <section class="px-4 md:px-6 max-w-6xl mx-auto" id="books-section">
+        <div class="flex items-baseline justify-between mb-8 border-b border-rose-600/20 pb-3">
+            <h2 class="text-xs uppercase tracking-widest text-rose-500 font-bold">Available Now</h2>
+            <span class="text-xs text-zinc-600 font-mono" id="book-count"></span>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" id="books-grid"></div>
+    </section>
+
+    <!-- Subscribe Strip -->
+    <section class="px-4 md:px-6 py-16 md:py-24 max-w-3xl mx-auto">
+        <div class="subscribe-strip rounded-3xl p-8 md:p-12 text-center">
+            <p class="text-rose-500 text-xs font-bold uppercase tracking-widest mb-3">Never miss a chapter</p>
+            <h2 class="text-2xl md:text-3xl font-black serif mb-3">Be the first to know.</h2>
+            <p class="text-gray-400 text-sm md:text-base serif mb-8">New chapters drop without warning. Subscribe and get notified the moment one lands.</p>
+            <form id="subscribe-form" onsubmit="handleSubscribe(event)" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <input type="email" id="subscribe-email" required placeholder="your.email@example.com" class="flex-1 bg-zinc-900 border border-white/10 px-5 py-3 rounded-full text-sm text-white focus:outline-none focus:border-rose-600 transition-colors">
+                <button type="submit" class="bg-rose-600 hover:bg-rose-700 px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest transition-all whitespace-nowrap">Notify Me</button>
+            </form>
+            <p id="subscribe-success" class="hidden text-rose-400 text-sm mt-4 serif italic">You're in. Watch your inbox.</p>
+        </div>
+    </section>
+
+    <!-- Chapter Reader Overlay -->
+    <div id="chapter-reader" class="chapter-reader">
+        <div class="max-w-2xl mx-auto px-4 md:px-6 py-8 md:py-12">
+            <!-- Reading progress -->
+            <div class="fixed top-0 left-0 w-full z-10">
+                <div class="progress-bar" id="reading-progress" style="width:0%"></div>
+            </div>
+            <button onclick="closeReader()" class="mb-8 flex items-center gap-2 text-rose-500 font-bold hover:text-rose-400 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                <span class="text-sm">BACK TO LIBRARY</span>
+            </button>
+            <article id="reader-content" class="animate-fade"></article>
+            <!-- Next chapter nudge -->
+            <div id="next-chapter-nudge" class="hidden mt-16 pt-12 border-t border-white/10 text-center">
+                <p class="text-zinc-500 serif italic text-sm mb-2">The story continues.</p>
+                <button id="next-chapter-btn" class="text-rose-500 font-bold hover:text-rose-400 transition-colors text-sm uppercase tracking-widest">Read Next Chapter →</button>
+            </div>
+            <div id="end-of-available" class="hidden mt-16 pt-12 border-t border-white/10 text-center">
+                <p class="text-2xl font-black serif mb-3">You've reached the edge.</p>
+                <p class="text-gray-400 serif italic text-sm mb-6">The next chapter is being written. Subscribe to know the moment it arrives.</p>
+                <button onclick="closeReader(); document.getElementById('subscribe-form').querySelector('input').focus()" class="bg-rose-600 hover:bg-rose-700 px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest transition-all">Notify Me When It's Ready</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCtZKeA_DERyfAQUfGddYEjS6iQRYVCKZY",
+            authDomain: "malel-creative.firebaseapp.com",
+            databaseURL: "https://malel-creative-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "malel-creative",
+            storageBucket: "malel-creative.firebasestorage.app",
+            messagingSenderId: "391798544085",
+            appId: "1:391798544085:web:b147dcde4260e7572e745c"
+        };
+        let database = null;
+        try { firebase.initializeApp(firebaseConfig); database = firebase.database(); }
+        catch(e) { console.error('Firebase unavailable.', e); }
+
+        const MALEL_EMAIL = 'ivycheruto30@gmail.com';
+
+        // ─── BOOKS DATA ───────────────────────────────────────────────
+        // To add a new book: copy the book object structure and add to this array.
+        // To add a new chapter: add to the book's chapters array.
+        // Set locked: true on any chapter not yet released.
+        const books = [
+            {
+                id: 'book_placeholder_1',
+                title: "BOOK TITLE",
+                subtitle: "A Novel by Malel",
+                cover: null, // replace with image path e.g. "covers/book1.jpg"
+                description: "A story about the things we carry before we know we are carrying them. About what happens when the weight finally becomes visible.",
+                genre: "Fiction",
+                status: "Ongoing",
+                chapters: [
+                    {
+                        id: 'ch1',
+                        number: 1,
+                        title: "Chapter One",
+                        excerpt: "She had learned very early that silence was not the absence of something. It was a presence all its own.",
+                        content: `She had learned very early that silence was not the absence of something. It was a presence all its own.
+
+It filled rooms. It filled the space between sentences, between people, between a question asked and the answer that never came. By the time she was old enough to understand what it meant, she had already made it her first language.
+
+The house she grew up in was full of it. Not the comfortable kind — not the silence of a Sunday morning or the silence of a sleeping child. This was the kind that had edges. The kind you learned to move around carefully, the way you move around furniture in the dark.
+
+Her mother moved through it like water. Her uncle moved through it like it belonged to him.
+
+Maybe it did.
+
+— — —
+
+She remembered the first time she understood the difference between being quiet and being silenced. She was nine. Maybe ten. Old enough to have an opinion, young enough that no one thought to ask for it.
+
+She had said something at the dinner table. She couldn't remember what — something small, something true. The kind of thing children say without armour because they haven't learned yet that truth requires armour.
+
+Her uncle had looked at her.
+
+He hadn't raised his voice. He hadn't moved. He had simply looked, the way a door looks when it is closed, and something in her had understood immediately: this is not a place for that. Whatever that was, it did not belong here.
+
+She had finished her food in silence.
+
+She had been finishing things in silence ever since.
+
+— — —
+
+Now she sat in a different room, in a different life, or what was supposed to be a different life, and she was thinking about that dinner table. About the way silence can travel. About how it follows you into rooms you thought were safe, into relationships you thought were yours.
+
+The man across from her was talking. He was kind. He was asking her something.
+
+She opened her mouth.
+
+And for a moment — just a moment — she couldn't find a single word that felt like it belonged to her.
+
+@Malel`,
+                        locked: false
+                    },
+                    {
+                        id: 'ch2',
+                        number: 2,
+                        title: "Chapter Two",
+                        excerpt: "There is a particular kind of love that looks like control. It takes years to learn the difference — sometimes a whole lifetime.",
+                        content: `There is a particular kind of love that looks like control. It takes years to learn the difference — sometimes a whole lifetime.
+
+She had spent most of hers not knowing there was a difference to learn.
+
+— — —
+
+When she was twelve, her uncle had driven her to school every morning for a month. She had thought, at the time, that it was kindness. He was the one who remembered. He was the one who showed up. In the absence of other evidence, she had filed this under love.
+
+It was only later — much later — that she noticed the pattern.
+
+He drove her to school. He also knew what time she arrived. He also knew, somehow, when she lingered at the gate. He also knew which friends she spoke to and for how long. He never asked. He never had to. The information simply appeared in his eyes the way conclusions appear — already formed, already decided.
+
+She had thought this was how love worked. That it watched. That it catalogued. That it kept record.
+
+No one had told her that love, the real kind, is not interested in records.
+
+— — —
+
+The man she was with now kept no record.
+
+He forgot things. Small things — what she'd told him about her week, what she'd said she wanted for her birthday. At first this had felt like negligence. She had waited, quietly, for the moment he would use what he knew. For the leverage. For the look.
+
+It never came.
+
+She didn't know what to do with that. With someone who simply forgot because they were human, not because they were gathering.
+
+She had started to wonder if the problem was him.
+
+It took her a long time to consider that the problem might be the shape she had been given — the one that only recognised love when it arrived with weight attached.
+
+@Malel`,
+                        locked: false
+                    },
+                    {
+                        id: 'ch3',
+                        number: 3,
+                        title: "Chapter Three",
+                        excerpt: "Coming soon — subscribe to be notified when this chapter drops.",
+                        content: '',
+                        locked: true
+                    }
+                ]
+            }
+        ];
+
+        // ─── STATE ────────────────────────────────────────────────────
+        let currentBookId = null;
+        let currentChapterIndex = null;
+
+        // ─── RENDER ───────────────────────────────────────────────────
+        function init() {
+            document.getElementById('book-count').textContent = `${books.length} ${books.length === 1 ? 'book' : 'books'}`;
+            renderBooks();
+        }
+
+        function renderBooks() {
+            document.getElementById('books-grid').innerHTML = books.map(book => `
+                <div class="book-card rounded-3xl overflow-hidden cursor-pointer" onclick="openBook('${book.id}')">
+                    <!-- Cover -->
+                    <div class="relative aspect-[3/4] bg-zinc-900 flex items-center justify-center overflow-hidden">
+                        ${book.cover
+                            ? `<img src="${book.cover}" class="w-full h-full object-cover opacity-80">`
+                            : `<div class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
+                                <div class="w-16 h-0.5 bg-rose-600 mb-6"></div>
+                                <h3 class="text-2xl md:text-3xl font-black serif leading-tight mb-4">${book.title}</h3>
+                                <p class="text-rose-500 text-xs uppercase tracking-widest font-bold">${book.subtitle}</p>
+                                <div class="w-16 h-0.5 bg-rose-600 mt-6"></div>
+                               </div>`
+                        }
+                        <div class="absolute top-4 right-4 flex flex-col gap-2">
+                            <span class="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-rose-600/90 text-white">${book.status}</span>
+                            <span class="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-zinc-900/90 text-zinc-400 border border-white/10">${book.genre}</span>
+                        </div>
+                    </div>
+                    <!-- Info -->
+                    <div class="p-5 md:p-6">
+                        <h3 class="font-black text-lg md:text-xl serif mb-2">${book.title}</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed serif mb-4 line-clamp-3">${book.description}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-rose-500 text-xs font-bold">${book.chapters.filter(c => !c.locked).length} of ${book.chapters.length} chapters available</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" class="text-rose-500"><path d="m9 18 6-6-6-6"/></svg>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openBook(bookId) {
+            const book = books.find(b => b.id === bookId);
+            if (!book) return;
+            currentBookId = bookId;
+
+            // Build chapter list view inside reader
+            document.getElementById('reader-content').innerHTML = `
+                <div class="mb-3 text-rose-500 font-bold uppercase tracking-widest text-xs">${book.genre}</div>
+                <h1 class="text-3xl md:text-5xl font-black serif mb-2 leading-tight">${book.title}</h1>
+                <p class="text-zinc-500 serif italic mb-8">${book.subtitle}</p>
+                <p class="text-gray-300 serif leading-relaxed text-base md:text-lg mb-12">${book.description}</p>
+                <div class="border-t border-white/10 pt-8">
+                    <h2 class="text-xs uppercase tracking-widest text-zinc-500 font-bold mb-6">Chapters</h2>
+                    <div class="space-y-3">
+                        ${book.chapters.map((ch, i) => ch.locked
+                            ? `<div class="chapter-item pl-5 py-4 pr-4 rounded-r-xl opacity-50 cursor-default flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs text-zinc-600 uppercase tracking-widest font-bold mb-1">Chapter ${ch.number}</p>
+                                    <h3 class="font-bold text-base text-zinc-500 serif">${ch.title}</h3>
+                                    <p class="text-zinc-600 text-sm serif italic mt-1">${ch.excerpt}</p>
+                                </div>
+                                <span class="lock-badge text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full text-rose-500 ml-4 flex-shrink-0">Soon</span>
+                               </div>`
+                            : `<div class="chapter-item pl-5 py-4 pr-4 rounded-r-xl cursor-pointer" onclick="openChapter('${bookId}', ${i})">
+                                <p class="text-xs text-rose-500 uppercase tracking-widest font-bold mb-1">Chapter ${ch.number}</p>
+                                <h3 class="font-bold text-base serif hover:text-rose-400 transition-colors">${ch.title}</h3>
+                                <p class="text-zinc-500 text-sm serif italic mt-1 line-clamp-2">${ch.excerpt}</p>
+                               </div>`
+                        ).join('')}
+                    </div>
+                </div>`;
+
+            document.getElementById('next-chapter-nudge').classList.add('hidden');
+            document.getElementById('end-of-available').classList.add('hidden');
+            document.getElementById('chapter-reader').classList.add('active');
+            document.getElementById('chapter-reader').scrollTop = 0;
+            document.body.style.overflow = 'hidden';
+        }
+
+        function openChapter(bookId, chapterIndex) {
+            const book = books.find(b => b.id === bookId);
+            if (!book) return;
+            const ch = book.chapters[chapterIndex];
+            if (!ch || ch.locked) return;
+
+            currentBookId = bookId;
+            currentChapterIndex = chapterIndex;
+
+            document.getElementById('reader-content').innerHTML = `
+                <div class="mb-3 text-rose-500 font-bold uppercase tracking-widest text-xs">${book.title} &bull; Chapter ${ch.number}</div>
+                <h1 class="text-3xl md:text-4xl font-black serif mb-10 leading-tight">${ch.title}</h1>
+                <div class="post-content serif text-gray-200 text-base md:text-lg">${ch.content}</div>`;
+
+            // Determine next chapter
+            const nextIndex = chapterIndex + 1;
+            const nextCh = book.chapters[nextIndex];
+            const nudge = document.getElementById('next-chapter-nudge');
+            const end = document.getElementById('end-of-available');
+
+            if (nextCh && !nextCh.locked) {
+                nudge.classList.remove('hidden');
+                end.classList.add('hidden');
+                document.getElementById('next-chapter-btn').onclick = () => openChapter(bookId, nextIndex);
+            } else {
+                nudge.classList.add('hidden');
+                end.classList.remove('hidden');
+            }
+
+            const reader = document.getElementById('chapter-reader');
+            reader.classList.add('active');
+            reader.scrollTop = 0;
+            document.body.style.overflow = 'hidden';
+
+            // Reading progress bar
+            reader.onscroll = () => {
+                const scrolled = reader.scrollTop;
+                const total = reader.scrollHeight - reader.clientHeight;
+                document.getElementById('reading-progress').style.width = `${Math.min(100, (scrolled / total) * 100)}%`;
+            };
+        }
+
+        function closeReader() {
+            document.getElementById('chapter-reader').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.getElementById('reading-progress').style.width = '0%';
+            currentChapterIndex = null;
+        }
+
+        async function handleSubscribe(e) {
+            e.preventDefault();
+            const email = document.getElementById('subscribe-email').value;
+            if (database) { database.ref('subscribers').push({ email, timestamp: Date.now(), source: 'books-page' }); }
+            try {
+                const fd = new FormData();
+                fd.append('email', email);
+                fd.append('_subject', 'New Malel Books Subscriber!');
+                fd.append('_captcha', 'false');
+                await fetch(`https://formsubmit.co/${MALEL_EMAIL}`, { method: 'POST', body: fd });
+            } catch(err) { console.error(err); }
+            document.getElementById('subscribe-success').classList.remove('hidden');
+            document.getElementById('subscribe-email').value = '';
+        }
+
+        init();
+    </script>
+</body>
+</html>
